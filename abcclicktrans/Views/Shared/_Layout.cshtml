@@ -20,7 +20,8 @@
     <link rel="stylesheet" href="~/assets/css/slick.css">
     <link rel="stylesheet" href="~/assets/css/nice-select.css">
     <link rel="stylesheet" href="~/assets/css/style.css">
-    
+    <link rel="stylesheet" href="~/assets/css/coverbootstrap.css">
+
     <script src="https://kit.fontawesome.com/cfa5470044.js" crossorigin="anonymous"></script>
 
 </head>
@@ -53,19 +54,19 @@
                                     </ul>
                                 </div>
                                 <div class="header-info-right">
-                                    <ul class="header-social">    
+                                    <ul class="header-social">
                                         <li><a href="http://facebook.com/abcclicktrans.eu/" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
                                         @if (SignInManager.IsSignedIn(User))
                                         {
                                             <li class="nav-item">
-                                                <a class="text-dark" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="fa-solid fa-gears"></i> Hello @User.Identity?.Name!</a>
+                                                <a class="text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="fa-solid fa-gears"></i> Witaj @User.Identity?.Name!</a>
                                             </li>
                                         }
                                         else
                                         {
                                             <li><a asp-area="Identity" asp-page="/Account/Login"><i class="fa-solid fa-arrow-right-to-bracket"></i></a></li>
                                         }
-                                        
+
                                     </ul>
                                 </div>
                             </div>
@@ -90,14 +91,17 @@
                                                 <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                                                 <li><a href="#">Znajdź zlecenie</a></li>
                                                 <li><a href="#">Dodaj zlecenie</a></li>
-                                                <li>
-                                                    <a href="#">Moje konto</a>
-                                                    <ul class="submenu">
-                                                        <li><a href="#">Moje dane</a></li>
-                                                        <li><a href="#">Zlecenia</a></li>
-                                                        <li><a href="#">Moje pojazdy</a></li>
-                                                    </ul>
-                                                </li>
+                                                @if (User.Identity.IsAuthenticated)
+                                                {
+                                                    <li>
+                                                        <a href="#">Moje konto</a>
+                                                        <ul class="submenu">
+                                                            <li><a asp-area="Identity" asp-page="/Account/Manage/PersonalData">Moje dane</a></li>
+                                                            <li><a href="#">Zlecenia</a></li>
+                                                            <li><a href="#">Moje pojazdy</a></li>
+                                                        </ul>
+                                                    </li>
+                                                }
                                                 <li><a href="#">Kontakt</a></li>
                                             </ul>
                                         </nav>
@@ -120,7 +124,7 @@
         <!-- Header End -->
     </header>
     <main>
-          @RenderBody()
+        @RenderBody()
     </main>
     <footer>
         <!--? Footer Start-->

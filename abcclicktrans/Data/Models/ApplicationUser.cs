@@ -19,6 +19,14 @@ namespace abcclicktrans.Data.Models
         public Guid? SubscriptionIdGuid { get; set; }
         public virtual Subscription? Subscription { get; set; }
 
+        public ApplicationUser(string firstName, string lastName, string email, string passwordHash) :base()
+        {
+            FirstName = firstName;
+            LastName = lastName;
+            Email = email;
+            PasswordHash = passwordHash;
+        }
+
         public ApplicationUser(string firstName, string lastName, string companyName, string nip, string? street, string? city, string? postal,
             string? country, bool isActive, bool isConfirmed, AccountType accountType) :base()
         {
