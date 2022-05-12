@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
+using abcclicktrans.Data;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace abcclicktrans.Areas.Identity.Pages.Account
@@ -24,13 +25,17 @@ namespace abcclicktrans.Areas.Identity.Pages.Account
         private readonly IUserEmailStore<ApplicationUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
         private readonly IEmailSender _emailSender;
+        private readonly RoleManager<IdentityRole> _roleManager;
+        private readonly AppDbContext _context;
 
         public RegisterModel(
             UserManager<ApplicationUser> userManager,
             IUserStore<ApplicationUser> userStore,
             SignInManager<ApplicationUser> signInManager,
             ILogger<RegisterModel> logger,
-            IEmailSender emailSender)
+            RoleManager<IdentityRole> roleManager,
+            IEmailSender emailSender,
+            AppDbContext ctx)
         {
             _userManager = userManager;
             _userStore = userStore;
@@ -38,6 +43,8 @@ namespace abcclicktrans.Areas.Identity.Pages.Account
             _signInManager = signInManager;
             _logger = logger;
             _emailSender = emailSender;
+            _roleManager = roleManager;
+            _context = ctx;
         }
 
         /// <summary>
@@ -119,9 +126,16 @@ namespace abcclicktrans.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                await _userStore.SetUserNameAsync(user, Input.FirstName + " " + Input.LastName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
+
+                await CreateRole();
+                await AddUserToRole(user);
+                if(user.AccountType == AccountType.Supplier)
+                {
+                    await GenerateSubscription(user);
+                }
 
                 if (result.Succeeded)
                 {
@@ -136,8 +150,9 @@ namespace abcclicktrans.Areas.Identity.Pages.Account
                         values: new { area = "Identity", userId = userId, code = code, returnUrl = returnUrl },
                         protocol: Request.Scheme);
 
-                    await _emailSender.SendEmailAsync(Input.Email, "Confirm your email",
-                        $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+                    await _emailSender.SendEmailAsync(Input.Email, "Potwierdź swoje konto abcClickTrans.eu",
+                        $"Witaj {Input.FirstName}<br />aby dokończyć rejestrację Twojego konta <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>KLIKNIJ TUTAJ</a>.<br /><br />" +
+                        $"<i>Wiadomość wygenerowana automatyczie prosimy na nią nie odpowiadać.</i>");
 
                     if (_userManager.Options.SignIn.RequireConfirmedAccount)
                     {
@@ -157,6 +172,40 @@ namespace abcclicktrans.Areas.Identity.Pages.Account
 
             // If we got this far, something failed, redisplay form
             return Page();
+        }
+
+        private async Task GenerateSubscription(ApplicationUser user)
+        {
+            _context.Subscriptions.Add(new Subscription(user.Id));
+            await _context.SaveChangesAsync();
+        }
+
+        private async Task AddUserToRole(ApplicationUser user)
+        {
+            var customerRole = _roleManager.FindByNameAsync(AccountType.Customer.ToString()).Result;
+            var supplierRole = _roleManager.FindByNameAsync(AccountType.Supplier.ToString()).Result;
+
+            if (user.AccountType == AccountType.Supplier && supplierRole != null)
+            {
+                IdentityResult roleresult = await _userManager.AddToRoleAsync(user, supplierRole.Name);
+            }
+            if (user.AccountType == AccountType.Customer && customerRole != null)
+            {
+                IdentityResult roleresult = await _userManager.AddToRoleAsync(user, customerRole.Name);
+            }
+        }
+
+        private async Task CreateRole()
+        {
+            foreach (var roleName in Enum.GetValues(typeof(AccountType)))
+            {
+                var roleExist = await _roleManager.RoleExistsAsync(roleName.ToString());
+                if (!roleExist)
+                {
+                    //create the roles and seed them to the database: Question 1
+                   var  roleResult = await _roleManager.CreateAsync(new IdentityRole(roleName.ToString()));
+                }
+            }
         }
 
         private ApplicationUser CreateUser()

@@ -96,10 +96,13 @@
                                                     <li>
                                                         <a href="#">Moje konto</a>
                                                         <ul class="submenu">
-                                                            <li><a asp-area="Identity" asp-page="/Account/Manage/PersonalData">Moje dane</a></li>
+                                                            <li><a asp-area="Identity" asp-page="/Account/Manage/Manage">Moje dane</a></li>
                                                             <li><a href="#">Zlecenia</a></li>
-                                                            <li><a href="#">Moje pojazdy</a></li>
-                                                            <li><a asp-controller="Home" asp-action="Logout">Wyloguj</a></li>
+                                                            @if (this.User.IsInRole(AccountType.Supplier.ToString()))
+                                                            {
+                                                                <li><a asp-controller="MyAccount" asp-action="Vehicles">Moje pojazdy</a></li>
+                                                            }
+                                                            <li><a asp-controller="MyAccount" asp-action="Logout">Wyloguj</a></li>
                                                         </ul>
                                                     </li>
                                                 }
