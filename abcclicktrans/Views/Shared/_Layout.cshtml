@@ -91,7 +91,7 @@
                                                 <li><a asp-controller="Home" asp-action="Index">Home</a></li>
                                                 <li><a href="#">Znajdź zlecenie</a></li>
                                                 <li><a href="#">Dodaj zlecenie</a></li>
-                                                @if (User.Identity.IsAuthenticated)
+                                                @if (SignInManager.IsSignedIn(User)) //if (User.Identity.IsAuthenticated)
                                                 {
                                                     <li>
                                                         <a href="#">Moje konto</a>
@@ -99,6 +99,7 @@
                                                             <li><a asp-area="Identity" asp-page="/Account/Manage/PersonalData">Moje dane</a></li>
                                                             <li><a href="#">Zlecenia</a></li>
                                                             <li><a href="#">Moje pojazdy</a></li>
+                                                            <li><a asp-controller="Home" asp-action="Logout">Wyloguj</a></li>
                                                         </ul>
                                                     </li>
                                                 }

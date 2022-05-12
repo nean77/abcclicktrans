@@ -39,6 +39,8 @@ namespace abcclicktrans.Areas.Identity.Pages.Account.Manage
         [TempData]
         public string StatusMessage { get; set; }
 
+        [Display(Name = "Typ konta")] public AccountType AccountType { get; set; }
+
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -57,8 +59,19 @@ namespace abcclicktrans.Areas.Identity.Pages.Account.Manage
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
             [Phone]
-            [Display(Name = "Phone number")]
+            [Display(Name = "Numer telefonu")]
             public string PhoneNumber { get; set; }
+
+            [Display(Name = "Imię")] public string FirstName { get; set; }
+            [Display(Name = "Nazwisko")] public string LastName { get; set; }
+            [Display(Name = "Nazwa firmy")] public string CompanyName { get; set; }
+            [MaxLength(10)][Display(Name = "NIP")] public string NIP { get; set; }
+            [Display(Name = "Potwierdzone konto")] public bool IsConfirmed { get; set; }
+            [Display(Name = "Ulica")] public string? Street { get; set; }
+            [Display(Name = "Miasto")] public string? City { get; set; }
+            [Display(Name = "Kod pocztowy")] public string? Postal { get; set; }
+            [Display(Name = "Kraj")] public string? Country { get; set; }
+            public bool CompanyAccount { get; set; }
         }
 
         private async Task LoadAsync(ApplicationUser user)
@@ -67,11 +80,23 @@ namespace abcclicktrans.Areas.Identity.Pages.Account.Manage
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
 
             Username = userName;
+            AccountType = user.AccountType;
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                CompanyName = user.CompanyName,
+                NIP = user.Nip,
+                IsConfirmed = user.IsConfirmed,
+                Street = user.Street,
+                City = user.City,
+                Postal = user.Postal,
+                Country = user.Country
             };
+
+            if (this.AccountType == AccountType.Supplier) Input.CompanyAccount = true;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -79,7 +104,7 @@ namespace abcclicktrans.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Nie odnaleziono użytkownika '{_userManager.GetUserId(User)}'.");
             }
 
             await LoadAsync(user);

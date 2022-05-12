@@ -1,4 +1,5 @@
 ﻿@page
+@using abcclicktrans.Data.Models
 @model IndexModel
 @{
     ViewData["Title"] = "Profile";
@@ -16,10 +17,63 @@
                 <label asp-for="Username" class="form-label"></label>
             </div>
             <div class="form-floating">
+                <input asp-for="Input.FirstName" placeholder="Imię" class="form-control" />
+                <label asp-for="Input.FirstName" class="form-label"></label>
+                <span asp-validation-for="Input.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.LastName" placeholder="Nazwisko" class="form-control" />
+                <label asp-for="Input.LastName" class="form-label"></label>
+                <span asp-validation-for="Input.LastName" class="text-danger"></span>
+            </div>
+            @if (Model.AccountType == AccountType.Supplier)
+            {
+                <div class="form-check pb-3">
+                    <input class="form-check-input" asp-for="Input.CompanyAccount" id="supplier" type="checkbox" disabled />
+                    <label class="form-check-label" for="supplier">Konto przewoźnika</label>
+                </div>
+                <div class="form-floating">
+                    <input asp-for="Input.CompanyName" placeholder="Nazwa firmy" class="form-control" />
+                    <label asp-for="Input.CompanyName" class="form-label"></label>
+                    <span asp-validation-for="Input.CompanyName" class="text-danger"></span>
+                </div>
+                <div class="form-floating">
+                    <input asp-for="Input.NIP" placeholder="Nip" class="form-control" />
+                    <label asp-for="Input.NIP" class="form-label"></label>
+                    <span asp-validation-for="Input.NIP" class="text-danger"></span>
+                </div>
+                <div class="form-check pb-3">
+                    <input class="form-check-input" asp-for="Input.IsConfirmed" id="confirmed" type="checkbox" disabled />
+                    <label class="form-check-label" for="supplier">Dokumenty przewoźnika zaakceptowane</label>
+                </div>
+            }
+            <div class="form-floating">
+                <input asp-for="Input.Street" placeholder="Ulica" class="form-control" />
+                <label asp-for="Input.Street" class="form-label"></label>
+                <span asp-validation-for="Input.Street" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.City" placeholder="Miasto" class="form-control" />
+                <label asp-for="Input.City" class="form-label"></label>
+                <span asp-validation-for="Input.City" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.Postal" placeholder="Kod pocztowy" class="form-control" />
+                <label asp-for="Input.Postal" class="form-label"></label>
+                <span asp-validation-for="Input.Postal" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.Country" placeholder="Kraj" class="form-control" />
+                <label asp-for="Input.Country" class="form-label"></label>
+                <span asp-validation-for="Input.Country" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
                 <input asp-for="Input.PhoneNumber" class="form-control" />
                 <label asp-for="Input.PhoneNumber" class="form-label"></label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
+            
+
             <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
         </form>
     </div>
