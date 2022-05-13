@@ -39,6 +39,36 @@ namespace abcclicktrans.Controllers
             return View(vehicles);
         }
 
+        [HttpGet]
+        [Authorize]
+        public IActionResult AddVehicle()
+        {
+            return View();
+        }
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> AddVehicle(Vehicle vehicle)
+        {
+            var userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            vehicle.ApplicationUserId = userId;
+            vehicle.TimeStamp = DateTime.Now;
+
+            if (!ModelState.IsValid)
+                return View(vehicle);
+            try
+            {
+                _ctx.Vehicles.Add(vehicle);
+                await _ctx.SaveChangesAsync();
+            }
+            catch
+            {
+                throw new Exception("Database save error");
+            }
+
+            return RedirectToAction("Vehicles");
+        }
+
         [Authorize]
         public async Task<IActionResult> Logout(string? returnUrl = null)
         {

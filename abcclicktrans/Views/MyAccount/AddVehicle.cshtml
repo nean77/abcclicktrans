@@ -1,0 +1,47 @@
+﻿@model abcclicktrans.Data.Models.Vehicle
+@using abcclicktrans.Data.Models;
+@{
+    ViewData["Title"] = "Dodaj pojazd";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<section class="contact-form-area section-bg pt-50 pb-40 fix" data-background="~/assets/img/gallery/section_bg02.jpg">
+    <div class="container">
+        <div class="col-xl-8 col-lg-9">
+            <div class="contact-form-wrapper">
+                <section>
+                    <form asp-action="AddVehicle" method="post" class="contact-form">
+                        <h2>Dodaj pojazd</h2>
+                        <hr />
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="VehicleType" class="control-label"></label>
+                            <select asp-for="VehicleType" asp-items="Html.GetEnumSelectList<VehicleType>()" class="form-control"></select>
+                            <span asp-validation-for="VehicleType" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Description" class="control-label"></label>
+                            <input asp-for="Description" class="form-control" />
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Year" class="control-label"></label>
+                            <input asp-for="Year" class="form-control" />
+                            <span asp-validation-for="Year" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <button id="save-submit" type="submit" class="w-100 submit-btn">Dodaj</button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="row">
+    <a asp-controller="Home" asp-action="Index">Powrót</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -16,20 +16,16 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
-//builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
-//    {
-//        options.SignIn.RequireConfirmedAccount = true;
-//        options.Password.RequiredLength = 8;
-//    })
-//    .AddEntityFrameworkStores<AppDbContext>();
-builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     {
         options.SignIn.RequireConfirmedAccount = true;
         options.Password.RequiredLength = 8;
     })
+    .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<AppDbContext>()
     .AddDefaultTokenProviders();
-builder.Services.AddRazorPages();
+
+//builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddTransient<IEmailSender, MailService>();
