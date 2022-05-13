@@ -7,6 +7,7 @@ using abcclicktrans.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
+
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("abcClickTrans");
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -15,20 +16,28 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
+//builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+//    {
+//        options.SignIn.RequireConfirmedAccount = true;
+//        options.Password.RequiredLength = 8;
+//    })
+//    .AddEntityFrameworkStores<AppDbContext>();
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     {
         options.SignIn.RequireConfirmedAccount = true;
         options.Password.RequiredLength = 8;
     })
-    .AddEntityFrameworkStores<AppDbContext>();
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddDefaultTokenProviders();
+builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddTransient<IEmailSender, MailService>();
 builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
 builder.Services.Configure<DataProtectionTokenProviderOptions>(o =>
     o.TokenLifespan = TimeSpan.FromHours(3));
-
-builder.Services.AddHealthChecks();
+//
+builder.Services.AddRazorPages();
 
 var app = builder.Build();
 

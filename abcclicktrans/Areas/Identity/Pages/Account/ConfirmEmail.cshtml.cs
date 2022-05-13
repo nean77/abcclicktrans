@@ -41,7 +41,19 @@ namespace abcclicktrans.Areas.Identity.Pages.Account
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
-            StatusMessage = result.Succeeded ? "Dziękujemy za potwierdzenie konta. /n Jeśli zakładałeś konto przewoźnika pamiętaj aby przesłać skan dokumentów celem uaktywnienia konta" : "Błąd potwierdzenia konta.";
+            if (user.AccountType == AccountType.Supplier)
+            {
+                StatusMessage = result.Succeeded
+                    ? "Dziękujemy za potwierdzenie konta. <br /> Pamiętaj aby przesłać skan dokumentów celem uaktywnienia konta przewoźnika."
+                    : "Błąd potwierdzenia konta.";
+            }
+            if (user.AccountType == AccountType.Customer)
+            {
+                StatusMessage = result.Succeeded
+                    ? "Dziękujemy za potwierdzenie konta."
+                    : "Błąd potwierdzenia konta.";
+            }
+
             return Page();
         }
     }

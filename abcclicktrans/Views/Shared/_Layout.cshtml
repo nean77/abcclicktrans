@@ -59,7 +59,7 @@
                                         @if (SignInManager.IsSignedIn(User))
                                         {
                                             <li class="nav-item">
-                                                <a class="text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="fa-solid fa-gears"></i> Witaj @User.Identity?.Name!</a>
+                                                <a class="text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="fa-solid fa-gears"></i> Witaj @User.Identity?.Name</a>
                                             </li>
                                         }
                                         else
@@ -96,7 +96,7 @@
                                                     <li>
                                                         <a href="#">Moje konto</a>
                                                         <ul class="submenu">
-                                                            <li><a asp-area="Identity" asp-page="/Account/Manage/Manage">Moje dane</a></li>
+                                                            <li><a asp-area="Identity" asp-page="/Account/Manage/PersonalData">Moje dane</a></li>
                                                             <li><a href="#">Zlecenia</a></li>
                                                             @if (this.User.IsInRole(AccountType.Supplier.ToString()))
                                                             {
