@@ -1,15 +1,8 @@
 ﻿@page
 @model ConfirmEmailModel
 @{
-    ViewData["Title"] = "Potwierdzenie Email";
+    ViewData["Title"] = "Confirm email";
 }
 
-<div class="our-info-area pt-70 pb-40">
-    <div class="container">
-        <div class="row">
-            <div class="col-sm-12">
-                <partial name="_StatusMessage" model="Model.StatusMessage" />
-            </div>
-        </div>
-    </div>
-</div>
+<h1>@ViewData["Title"]</h1>
+<partial name="_StatusMessage" model="Model.StatusMessage" />

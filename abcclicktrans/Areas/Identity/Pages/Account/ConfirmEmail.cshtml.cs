@@ -2,20 +2,23 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 #nullable disable
 
-using abcclicktrans.Data.Models;
+using System;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using System.Text;
 
 namespace abcclicktrans.Areas.Identity.Pages.Account
 {
     public class ConfirmEmailModel : PageModel
     {
-        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public ConfirmEmailModel(UserManager<ApplicationUser> userManager)
+        public ConfirmEmailModel(UserManager<IdentityUser> userManager)
         {
             _userManager = userManager;
         }
@@ -41,19 +44,7 @@ namespace abcclicktrans.Areas.Identity.Pages.Account
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
             var result = await _userManager.ConfirmEmailAsync(user, code);
-            if (user.AccountType == AccountType.Supplier)
-            {
-                StatusMessage = result.Succeeded
-                    ? "Dziękujemy za potwierdzenie konta. <br /> Pamiętaj aby przesłać skan dokumentów celem uaktywnienia konta przewoźnika."
-                    : "Błąd potwierdzenia konta.";
-            }
-            if (user.AccountType == AccountType.Customer)
-            {
-                StatusMessage = result.Succeeded
-                    ? "Dziękujemy za potwierdzenie konta."
-                    : "Błąd potwierdzenia konta.";
-            }
-
+            StatusMessage = result.Succeeded ? "Thank you for confirming your email." : "Error confirming your email.";
             return Page();
         }
     }

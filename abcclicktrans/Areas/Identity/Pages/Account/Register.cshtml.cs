@@ -53,7 +53,7 @@ namespace abcclicktrans.Areas.Identity.Pages.Account
         /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
-        
+
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -126,13 +126,13 @@ namespace abcclicktrans.Areas.Identity.Pages.Account
             if (ModelState.IsValid)
             {
                 var user = CreateUser();
-                await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
+                await _userStore.SetUserNameAsync(user, Input.FirstName + " " + Input.LastName, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 await CreateRole();
                 await AddUserToRole(user);
-                if(user.AccountType == AccountType.Supplier)
+                if (user.AccountType == AccountType.Supplier)
                 {
                     await GenerateSubscription(user);
                 }
@@ -203,7 +203,7 @@ namespace abcclicktrans.Areas.Identity.Pages.Account
                 if (!roleExist)
                 {
                     //create the roles and seed them to the database: Question 1
-                   var  roleResult = await _roleManager.CreateAsync(new IdentityRole(roleName.ToString()));
+                    var roleResult = await _roleManager.CreateAsync(new IdentityRole(roleName.ToString()));
                 }
             }
         }
