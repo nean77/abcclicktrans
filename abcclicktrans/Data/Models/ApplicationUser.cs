@@ -5,17 +5,17 @@ namespace abcclicktrans.Data.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        [Required] public string FirstName { get; set; }
-        [Required] public string LastName { get; set; }
-        public string CompanyName { get; set; }
+        [Display(Name = "Imię")][Required] public string FirstName { get; set; }
+        [Display(Name = "Nazwisko")][Required] public string LastName { get; set; }
+        [Display(Name = "Nazwa firmy")] public string CompanyName { get; set; }
         [MaxLength(10)] public string Nip { get; set; }
-        public bool IsActive { get; set; }
-        public bool IsConfirmed { get; set; }
-        public string? Street { get; set; }
-        public string? City { get; set; }
-        public string? Postal { get; set; }
-        public string? Country { get; set; }
-        public AccountType AccountType { get; set; }
+        [Display(Name = "Konto aktywne")] public bool IsActive { get; set; }
+        [Display(Name = "Potwierdzenie dokumentów")] public bool IsConfirmed { get; set; }
+        [Display(Name = "Ulica")] public string? Street { get; set; }
+        [Display(Name = "Miasto")] public string? City { get; set; }
+        [Display(Name = "Kod pocztowy")] public string? Postal { get; set; }
+        [Display(Name = "Kraj")] public string? Country { get; set; }
+        [Display(Name = "Typ konta")] public AccountType AccountType { get; set; }
         public Guid? SubscriptionIdGuid { get; set; }
         public virtual Subscription? Subscription { get; set; }
 

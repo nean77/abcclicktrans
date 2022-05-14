@@ -1,10 +1,10 @@
-﻿using System.Security.Claims;
-using abcclicktrans.Data;
+﻿using abcclicktrans.Data;
 using abcclicktrans.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Claims;
 
 namespace abcclicktrans.Controllers
 {
@@ -15,7 +15,7 @@ namespace abcclicktrans.Controllers
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AppDbContext _ctx;
 
-        public MyAccountController(SignInManager<ApplicationUser> signInManager, ILogger<MyAccountController> logger, 
+        public MyAccountController(SignInManager<ApplicationUser> signInManager, ILogger<MyAccountController> logger,
             IHttpContextAccessor httpContextAccessor, AppDbContext ctx)
         {
             _logger = logger;
@@ -53,9 +53,7 @@ namespace abcclicktrans.Controllers
 
             vehicle.ApplicationUserId = userId;
             vehicle.TimeStamp = DateTime.Now;
-
-            if (!ModelState.IsValid)
-                return View(vehicle);
+            
             try
             {
                 _ctx.Vehicles.Add(vehicle);
@@ -63,10 +61,67 @@ namespace abcclicktrans.Controllers
             }
             catch
             {
-                throw new Exception("Database save error");
+                return View(vehicle);
             }
 
             return RedirectToAction("Vehicles");
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> EditVehicle(long id)
+        {
+            var vehicle = await _ctx.Vehicles.FirstOrDefaultAsync(x => x.Id == id);
+            return View(vehicle);
+        }
+        [HttpPost]
+        [Authorize]
+        public async Task<IActionResult> EditVehicle(Vehicle vehicle)
+        {
+            try
+            {
+                vehicle.ModifiedDateTime = DateTime.Now;
+                _ctx.Vehicles.Update(vehicle);
+                await _ctx.SaveChangesAsync();
+
+                return RedirectToAction("Vehicles");
+            }
+            catch (Exception ex)
+            {
+                return View(vehicle);
+            }
+        }
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> DeleteVehicle(int id)
+        {
+            var vehicle = await _ctx.Vehicles.FirstOrDefaultAsync(x => x.Id == id);
+            if (vehicle.Id == 0)
+            {
+                return NotFound();
+            }
+
+            return View(vehicle);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> DeleteConfirmed(int id)
+        {
+            try
+            {
+                var vehicle = await _ctx.Vehicles.FirstOrDefaultAsync(x => x.Id == id);
+                _ctx.Vehicles.Remove(vehicle);
+                await _ctx.SaveChangesAsync();
+
+                return RedirectToAction("Vehicles");
+            }
+            catch (Exception e)
+            {
+                throw new Exception("Vehicle can't be deleted");
+            }
+            
         }
 
         [Authorize]
@@ -80,6 +135,6 @@ namespace abcclicktrans.Controllers
             }
             return RedirectToAction("Index", "Home");
         }
-        
+
     }
 }

@@ -1,7 +1,8 @@
-﻿@model abcclicktrans.Data.Models.Vehicle
-@using abcclicktrans.Data.Models;
+﻿@using abcclicktrans.Data.Models
+@model abcclicktrans.Data.Models.Vehicle
+
 @{
-    ViewData["Title"] = "Dodaj pojazd";
+    ViewData["Title"] = "Edytuj pojazd";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
@@ -10,13 +11,19 @@
         <div class="col-xl-8 col-lg-9">
             <div class="contact-form-wrapper">
                 <section>
-                    <form asp-action="AddVehicle" method="post" class="contact-form">
-                        <h2>Dodaj pojazd</h2>
+                    <form asp-action="EditVehicle" method="post" class="contact-form">
+                        <h2>Edytuj pojazd</h2>
                         <hr />
                         <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <input type="hidden" asp-for="Id" />
+                        <input type="hidden" asp-for="ApplicationUserId" />
+                        <input type="hidden" asp-for="ApplicationUser" />
+                        <input type="hidden" asp-for="TimeStamp" />
                         <div class="form-group">
                             <label asp-for="VehicleType" class="control-label"></label>
-                            <select asp-for="VehicleType" asp-items="Html.GetEnumSelectList<VehicleType>()" class="form-control"></select>
+                            <select asp-for="VehicleType" asp-items="Html.GetEnumSelectList<VehicleType>()" class="form-control">
+                                <option value="@Model.VehicleType" selected="selected"></option>
+                            </select>
                             <span asp-validation-for="VehicleType" class="text-danger"></span>
                         </div>
                         <div class="form-group">
@@ -30,7 +37,7 @@
                             <span asp-validation-for="Year" class="text-danger"></span>
                         </div>
                         <div class="form-group">
-                            <button id="save-submit" type="submit" class="w-100 submit-btn">Dodaj</button>
+                            <button id="save-submit" type="submit" class="w-100 submit-btn">Edytuj</button>
                         </div>
                     </form>
                 </section>
@@ -41,6 +48,7 @@
 <div class="row">
     <a asp-action="Vehicles">Powrót</a>
 </div>
+
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}

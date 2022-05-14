@@ -34,14 +34,14 @@
             {
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">@item.VehicleType.ToString()</h5>
+                        <h5 class="card-title">@item.VehicleType</h5>
                         <p class="card-text">@item.Description</p>
                         <p class="card-text">Rocznik: @item.Year</p>
                     </div>
                     <div class="card-footer">
                         <small class="text-muted">Dodany: @item.TimeStamp.ToShortDateString()  |   </small>
-                        <button type="button" class="btn btn-dark">Edytuj</button>
-                        <button type="button" class="btn btn-secondary">Usuń</button>
+                        <a asp-action="EditVehicle"  type="button" class="btn btn-dark" asp-route-id="@item.Id">Edytuj</a>
+                        <a asp-action="DeleteVehicle" type="button" class="btn btn-secondary" asp-route-id="@item.Id">Usuń</a>
                     </div>
                 </div>
             }

@@ -4,10 +4,10 @@ namespace abcclicktrans.Data.Models;
 
 public class Subscription
 {
-    public Guid Id { get; set; }
+    [Display(Name = "Nr subskrypcji")] public Guid Id { get; set; }
     [Required] public string ApplicationUserId { get; set; }
-    public DateTime RegistredDateTime { get; set; }
-    public DateTime ExpirationDateTime { get; set; }
+    [Display(Name = "Data rejestracji")] public DateTime RegistredDateTime { get; set; }
+    [Display(Name = "Data wygaśnięcia")] public DateTime ExpirationDateTime { get; set; }
     public virtual ApplicationUser ApplicationUser { get; set; }
 
     public Subscription(string applicationUserId)
