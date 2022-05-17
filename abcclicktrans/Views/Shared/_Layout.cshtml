@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="~/assets/css/nice-select.css">
     <link rel="stylesheet" href="~/assets/css/style.css">
     <link rel="stylesheet" href="~/assets/css/coverbootstrap.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
     <script src="https://kit.fontawesome.com/cfa5470044.js" crossorigin="anonymous"></script>
 
@@ -89,15 +90,15 @@
                                         <nav>
                                             <ul id="navigation">
                                                 <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                                                <li><a href="#">Znajdź zlecenie</a></li>
-                                                <li><a href="#">Dodaj zlecenie</a></li>
-                                                @if (SignInManager.IsSignedIn(User)) //if (User.Identity.IsAuthenticated)
+                                                <li><a asp-controller="TransportOrder" asp-action="Index">Znajdź zlecenie</a></li>
+                                                <li><a asp-controller="TransportOrder" asp-action="AddOrder">Dodaj zlecenie</a></li>
+                                                @if (SignInManager.IsSignedIn(User)) 
                                                 {
                                                     <li>
                                                         <a href="#">Moje konto</a>
                                                         <ul class="submenu">
                                                             <li><a asp-area="Identity" asp-page="/Account/Manage/PersonalData">Moje dane</a></li>
-                                                            <li><a href="#">Zlecenia</a></li>
+                                                            <li><a asp-controller="TransportOrder" asp-action="MyOrders">Moje zlecenia</a></li>
                                                             @if (this.User.IsInRole(AccountType.Supplier.ToString()))
                                                             {
                                                                 <li><a asp-controller="MyAccount" asp-action="Vehicles">Moje pojazdy</a></li>
@@ -112,7 +113,7 @@
                                     </div>
                                     <!-- Header-btn -->
                                     <div class="header-right-btn d-none d-lg-block ml-20">
-                                        <a href="#" class="btn header-btn">Dodaj zlecenie</a>
+                                        <a asp-controller="TransportOrder" asp-action="AddOrder" class="btn header-btn">Dodaj zlecenie</a>
                                     </div>
                                 </div>
                             </div>

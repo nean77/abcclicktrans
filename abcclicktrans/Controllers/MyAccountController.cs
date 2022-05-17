@@ -1,10 +1,14 @@
-﻿using abcclicktrans.Data;
+﻿using System.ComponentModel.DataAnnotations;
+using System.Reflection;
+using abcclicktrans.Data;
 using abcclicktrans.Data.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
+using abcclicktrans.Extensions;
+using Microsoft.OpenApi.Extensions;
 
 namespace abcclicktrans.Controllers
 {
@@ -34,7 +38,14 @@ namespace abcclicktrans.Controllers
                 return RedirectToAction("Index", "Home");
             }
 
-            var vehicles = await _ctx.Vehicles.Where(x => x.ApplicationUserId == userId).ToListAsync();
+            var vehicles = await _ctx.Vehicles
+                .Where(x => x.ApplicationUserId == userId).ToListAsync();
+
+            foreach (var vehicle in vehicles)
+            {
+                var x = (VehicleType)Enum.Parse(typeof(VehicleType), vehicle.VehicleType.ToString());
+                vehicle.VehicleType = x;
+            }
 
             return View(vehicles);
         }
@@ -53,7 +64,8 @@ namespace abcclicktrans.Controllers
 
             vehicle.ApplicationUserId = userId;
             vehicle.TimeStamp = DateTime.Now;
-            
+            vehicle.Name = vehicle.VehicleType.GetDisplayName();
+
             try
             {
                 _ctx.Vehicles.Add(vehicle);
@@ -81,6 +93,8 @@ namespace abcclicktrans.Controllers
             try
             {
                 vehicle.ModifiedDateTime = DateTime.Now;
+                vehicle.Name = vehicle.VehicleType.GetDisplayName();
+
                 _ctx.Vehicles.Update(vehicle);
                 await _ctx.SaveChangesAsync();
 

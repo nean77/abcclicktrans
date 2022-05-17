@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Microsoft.OpenApi.Extensions;
 
 namespace abcclicktrans.Data.Models
 {
@@ -7,6 +8,7 @@ namespace abcclicktrans.Data.Models
         public long Id { get; set; }
         [Required] public string ApplicationUserId { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
+        [Display(Name = "Nazwa")]public string Name { get; set; }
         [Display(Name = "Typ pojazdu")][Required] public VehicleType VehicleType { get; set; }
         [Display(Name = "Opis")][Required] public string Description { get; set; }
         [Display(Name = "Rocznik")] public string Year { get; set; }
@@ -24,7 +26,7 @@ namespace abcclicktrans.Data.Models
 
         public override string ToString()
         {
-            return VehicleType.ToString() + " " + Description + " Rocznik: " + Year;
+            return Name;
         }
     }
 }

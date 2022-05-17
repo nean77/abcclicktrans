@@ -1,0 +1,112 @@
+﻿@using abcclicktrans.ViewModels
+@using System.Globalization
+@model IEnumerable<abcclicktrans.ViewModels.TransportOrderViewModel>
+@{
+    ViewData["Title"] = "Zlecenia";
+}
+<div class="container pb-40">
+    <div id="liveAlertPlaceholder"></div>
+    <div class="panel">
+        @foreach (var item in Model)
+        {
+            <details>
+                <summary>
+                    <ul>
+                        <li class="name">@item.Name</li>
+                        <li class="titleValue"><time>Odbiór:</time> @item.PickUpAddress.City</li>
+                        <li class="titleValue"><time>Dostawa:</time> @item.DeliveryAddress.City</li>
+                    </ul>
+                </summary>
+                <div class="content">
+                    <div class="row">
+                        <div class="col-md-3 col-sm-3">
+                            @if (@item.ImageSrc != String.Empty)
+                            {
+                                <a href="@item.ImageSrc" class="img-pop-up">
+                                    <img src="@item.ImageSrc" alt="Obraz" class="img-thumbnail">
+                                </a>
+                            }
+                            else
+                            {
+                                <img src="/assets/img/no-photo.jpg" alt="Obraz" class="img-thumbnail">
+                            }
+                        </div>
+                        <div class="col-md-5 col-sm-5">
+                            <span class="text-justify text-dark">@item.Description</span>
+                        </div>
+                        <div class="col-md-4 col-sm-4">
+                            <span>Zleceniodawca:</span><br />
+                            <span class="txt"><b>Email: </b>@item.User.Email</span><br />
+                            @if (item.User.PhoneNumber != null)
+                            {
+                                <span class="txt"><b>Telefon: </b>@item.User.PhoneNumber</span>
+                            }
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 col-sm-6">
+                            <p><b>Adres nadania:</b></p>
+                            <span class="text-justify text-dark">
+                                Ulica: @item.PickUpAddress.Street<br />
+                                Miasto: @item.PickUpAddress.Postal @item.PickUpAddress.City<br />
+                                Kraj: @item.PickUpAddress.Country<br />
+                            </span>
+                            <b>Data nadania:</b>
+                            @if (@item.PickupDateTime == null)
+                                {
+                                    <span class="text-justify text-dark">- do ustalenia -</span>
+                                }
+                                else
+                                {
+                                    <span class="text-justify text-dark">@item.PickupDateTime</span>
+                                }
+                        </div>
+                        <div class="col-md-6 col-sm-6">
+                            <p><b>Adres dostawy:</b></p>
+                            <span class="text-justify text-dark">
+                                Ulica: @item.DeliveryAddress.Street<br />
+                                Miasto: @item.DeliveryAddress.Postal @item.DeliveryAddress.City<br />
+                                Kraj: @item.DeliveryAddress.Country<br />
+                            </span>
+                            <b>Data dostawy:</b>
+                            @if (@item.DeliveryDateTime == null)
+                            {
+                                <span class="text-justify text-dark"> - do ustalenia - </span>
+                            }
+                            else
+                            {
+                                <span class="text-justify text-dark"> @item.PickupDateTime </span>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </details>
+        }
+    </div>
+</div>
+
+@if (ViewData["FromAdd"] != null)
+{
+    @section Scripts {
+        const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+
+        const alert = (message, type) => {
+        const wrapper = document.createElement('div')
+        wrapper.innerHTML = [
+        `<div class="alert alert-@ViewData["alert"] alert-dismissible" role="alert">`,
+            `   <div>@ViewData["message"]</div>`,
+            '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+            '</div>'
+        ].join('')
+
+        alertPlaceholder.append(wrapper)
+        }
+
+        const alertTrigger = document.getElementById('liveAlertBtn')
+        if (alertTrigger) {
+        alertTrigger.addEventListener('click', () => {
+        alert('Nice, you triggered this alert message!', 'success')
+        })
+        }
+}
+}

@@ -1,0 +1,183 @@
+﻿@using abcclicktrans.Data.Models
+@model abcclicktrans.ViewModels.TransportOrderViewModel
+
+@{
+    ViewData["Title"] = "Dodaj zlecenie";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@Html.AntiForgeryToken()
+<section class="contact-form-area section-bg pt-50 pb-40 fix" data-background="~/assets/img/gallery/section_bg02.jpg">
+    <div class="container">
+        <div class="col-xl-8 col-lg-9">
+            <div class="contact-form-wrapper">
+                <section>
+                    <form enctype="multipart/form-data" asp-action="AddOrder" method="Post">
+                        <h2>Dodaj zlecenie transportowe</h2>
+                        <hr />
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                        <div class="form-group">
+                            <label asp-for="Name" class="control-label"></label>
+                            <input asp-for="Name" class="form-control" />
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Description" class="control-label"></label>
+                            <input asp-for="Description" class="form-control" />
+                            <span asp-validation-for="Description" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <label asp-for="ParcelSize.Width" class="control-label"></label>
+                                    <input asp-for="ParcelSize.Width" class="form-control" />
+                                </div>
+                                <div class="col-sm-3">
+                                    <label asp-for="ParcelSize.Height" class="control-label"></label>
+                                    <input asp-for="ParcelSize.Height" class="form-control" />
+                                </div>
+                                <div class="col-sm-3">
+                                    <label asp-for="ParcelSize.Length" class="control-label"></label>
+                                    <input asp-for="ParcelSize.Length" class="form-control" />
+                                </div>
+                                <div class="col-sm-3">
+                                    <label asp-for="ParcelSize.Weight" class="control-label"></label>
+                                    <input asp-for="ParcelSize.Weight" class="form-control" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <span asp-validation-for="ParcelSize.Weight" class="text-danger"></span>
+                                <span asp-validation-for="ParcelSize.Length" class="text-danger"></span>
+                                <span asp-validation-for="ParcelSize.Width" class="text-danger"></span>
+                                <span asp-validation-for="ParcelSize.Height" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="form-group form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="TailLift" /> @Html.DisplayNameFor(model => model.TailLift)
+                            </label>
+                        </div>
+                        <div class="form-group form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="LoadAssistance" /> @Html.DisplayNameFor(model => model.LoadAssistance)
+                            </label>
+                        </div>
+                        <div class="form-group form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="OCP" /> @Html.DisplayNameFor(model => model.OCP)
+                            </label>
+                        </div>
+                        <div class="form-group form-check">
+                            <label class="form-check-label">
+                                <input class="form-check-input" asp-for="ADR" /> @Html.DisplayNameFor(model => model.ADR)
+                            </label>
+                        </div>
+                        <div class="card">
+                            <h5 class="card-header">Adres nadania</h5>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label asp-for="PickUpAddress.Street" class="control-label"></label>
+                                    <input asp-for="PickUpAddress.Street" class="form-control" />
+                                    <span asp-validation-for="PickUpAddress.Street" class="text-danger"></span>
+                                    <label asp-for="PickUpAddress.City" class="control-label"></label>
+                                    <input asp-for="PickUpAddress.City" class="form-control" />
+                                    <span asp-validation-for="PickUpAddress.City" class="text-danger"></span>
+                                    <label asp-for="PickUpAddress.Postal" class="control-label"></label>
+                                    <input asp-for="PickUpAddress.Postal" class="form-control" />
+                                    <span asp-validation-for="PickUpAddress.Postal" class="text-danger"></span>
+                                    <label asp-for="PickUpAddress.Country" class="control-label"></label>
+                                    <input asp-for="PickUpAddress.Country" class="form-control" />
+                                    <span asp-validation-for="PickUpAddress.Country" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="PickupDateTime" class="control-label"></label>
+                                    <input asp-for="PickupDateTime" class="form-control" />
+                                    <span asp-validation-for="PickupDateTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="card">
+                            <h5 class="card-header">Adres dostawy</h5>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label asp-for="DeliveryAddress.Street" class="control-label"></label>
+                                    <input asp-for="DeliveryAddress.Street" class="form-control" />
+                                    <span asp-validation-for="DeliveryAddress.Street" class="text-danger"></span>
+                                    <label asp-for="DeliveryAddress.City" class="control-label"></label>
+                                    <input asp-for="DeliveryAddress.City" class="form-control" />
+                                    <span asp-validation-for="DeliveryAddress.City" class="text-danger"></span>
+                                    <label asp-for="DeliveryAddress.Postal" class="control-label"></label>
+                                    <input asp-for="DeliveryAddress.Postal" class="form-control" />
+                                    <span asp-validation-for="DeliveryAddress.Postal" class="text-danger"></span>
+                                    <label asp-for="DeliveryAddress.Country" class="control-label"></label>
+                                    <input asp-for="DeliveryAddress.Country" class="form-control" />
+                                    <span asp-validation-for="DeliveryAddress.Country" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="DeliveryDateTime" class="control-label"></label>
+                                    <input asp-for="DeliveryDateTime" class="form-control" />
+                                    <span asp-validation-for="DeliveryDateTime" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <label asp-for="Category" class="control-label"></label>
+                            <br />
+                            <select asp-for="Category" asp-items="Html.GetEnumSelectList<ParcelCategory>()" class="form-control"></select>
+                            <span asp-validation-for="Category" class="text-danger"></span>
+                        </div>
+                        <br />
+                        <div class="form-group">
+                            <br />
+                            <label asp-for="MaxValue" class="control-label"></label>
+                            <input asp-for="MaxValue" class="form-control"/>
+                            <span asp-validation-for="MaxValue" class="text-danger"></span>
+                            <span class="text-dark">Kwota podawana w PLN.</span>
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Image" class="control-label"></label>
+                            <div class="custom-file">
+                                <input asp-for="Image" class="custom-file-input" id="customFile" accept="image/*">
+                                <label class="custom-file-label" for="customFile">Wybierz plik</label>
+                                <span class="text-dark">Maksymalny rozmiar pliku 2 MB.</span>
+                            </div>
+                            <span asp-validation-for="Image" class="text-danger"></span>
+                        </div>
+                        <div class="form-group">
+                            <button id="save-submit" type="submit" class="w-100 submit-btn">Dodaj</button>
+                        </div>
+                    </form>
+                </section>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="row">
+    <a asp-action="Index">Powrót</a>
+</div>
+
+@section Scripts {
+<script type="text/javascript">
+
+    // Add the following code if you want the name of the file appear on select
+    $(".custom-file-input").on("change", function () {
+        var fileName = $(this).val().split("\\").pop();
+        $(this).siblings(".custom-file-label").addClass("selected").html(fileName);
+    });
+
+    var uploadField = document.getElementById("customFile");
+    uploadField.onchange = function() {
+        if(this.files[0].size > 2021440){
+            alert("Plik jest zbyt duży! Maksymalna wielkość pliku to 2MB.");
+            this.value = "";
+        };
+    };
+</script>
+
+
+    @{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

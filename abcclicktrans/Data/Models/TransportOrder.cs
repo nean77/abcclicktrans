@@ -4,58 +4,28 @@ namespace abcclicktrans.Data.Models
 {
     public class TransportOrder
     {
-        public long Id { get; set; }
-        [Required] public string Name { get; set; }
-        [Required] public string Description { get; set; }
-        public string? Width { get; set; }
-        public string? Height { get; set; }
-        public string? Length { get; set; }
-        public string? Weight { get; set; }
-        public bool TailLift { get; set; }
-        public bool LoadAssistance { get; set; }
+        [Display(Name = "Id zlecenia")] public long Id { get; set; }
+        [Display(Name = "Tytuł")][Required] public string Name { get; set; }
+        [Display(Name = "Opis transportu")][Required] public string Description { get; set; }
+        [Display(Name = "Szerokość")] public string? Width { get; set; }
+        [Display(Name = "Wysokość")] public string? Height { get; set; }
+        [Display(Name = "Długość")] public string? Length { get; set; }
+        [Display(Name = "Waga")] public string? Weight { get; set; }
+        [Display(Name = "Wymagana winda")] public bool TailLift { get; set; }
+        [Display(Name = "Wymagana pomoc załadunku")] public bool LoadAssistance { get; set; }
         public bool OCP { get; set; }
         public bool ADR { get; set; }
-        public DateTime CreateDateTime { get; set; }
-        [Required] public TransportAddress PickUpAddress { get; set; }
-        public DateTime? PickupDateTime { get; set; }
-        [Required] public TransportAddress DeliveryAddress { get; set; }
-        public DateTime? DeliveryDateTime { get; set; }
-        public string? Distance { get; set; }
-        [Required] public ParcelCategory Category { get; set; }
-        [DataType(DataType.Currency)] public decimal MaxValue { get; set; }
-
-        /*public TransportOrder(string name, string description, ParcelSize size, bool tailLift, bool loadAssistance,
-            bool ocp, bool adr, TransportAddress pickUpAddress, TransportAddress deliveryAddress, ParcelCategory category, decimal maxValue)
-        {
-            Name = name;
-            Description = description;
-            Size = size;
-            TailLift = tailLift;
-            LoadAssistance = loadAssistance;
-            OCP = ocp;
-            ADR = adr;
-            DeliveryAddress = deliveryAddress;
-            Category = category;
-            MaxValue = maxValue;
-            PickUpAddress = pickUpAddress;
-            CreateDateTime = DateTime.Now;
-        }
-        public TransportOrder(string name, string description, ParcelSize size, bool tailLift, bool loadAssistance,
-            bool ocp, bool adr, TransportAddress pickUpAddress, DateTime pickupDateTime, TransportAddress deliveryAddress, 
-            DateTime deliveryDateTime, ParcelCategory category, decimal maxValue) : this(name, description, size, tailLift, loadAssistance,
-                ocp, adr, pickUpAddress, deliveryAddress, category, maxValue)
-        {
-            PickupDateTime = pickupDateTime;
-            DeliveryDateTime = deliveryDateTime;
-        }
-        */
+        [Display(Name = "Data utworzenia")] public DateTime CreateDateTime { get; set; }
+        [Display(Name = "Adres nadania")][Required] public TransportAddress PickUpAddress { get; set; }
+        [Display(Name = "Data nadania")] public DateTime? PickupDateTime { get; set; }
+        [Display(Name = "Adres Dostawy")][Required] public TransportAddress DeliveryAddress { get; set; }
+        [Display(Name = "Data dostawy")] public DateTime? DeliveryDateTime { get; set; }
+        [Display(Name = "Dystans")] public string? Distance { get; set; }
+        [Display(Name = "Kategoria towaru")][Required] public ParcelCategory Category { get; set; }
+        [Display(Name = "Budżet")][DataType(DataType.Currency)] public decimal MaxValue { get; set; }
+        [Display(Name = "Obraz")] public string? Image { get; set; }
+        [Display(Name = "Id użytkownika")] public string ApplicationUserId { get; set; }
+        public ApplicationUser User { get; set; }
     }
-
-    public class ParcelSize
-    {
-        public string? Width { get; set; }
-        public string? Height { get; set; }
-        public string? Length { get; set; }
-        public string? Weight { get; set; }
-    }
+    
 }

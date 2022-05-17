@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using abcclicktrans.Data;
 
@@ -11,9 +12,10 @@ using abcclicktrans.Data;
 namespace abcclicktrans.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220515104840_AddImageToTO")]
+    partial class AddImageToTO
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,7 +88,7 @@ namespace abcclicktrans.Data.Migrations
 
                     b.Property<string>("ApplicationUserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Category")
                         .HasColumnType("int");
@@ -146,8 +148,6 @@ namespace abcclicktrans.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ApplicationUserId");
-
                     b.HasIndex("DeliveryAddressId");
 
                     b.HasIndex("PickUpAddressId");
@@ -173,10 +173,6 @@ namespace abcclicktrans.Data.Migrations
 
                     b.Property<DateTime?>("ModifiedDateTime")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("TimeStamp")
                         .HasColumnType("datetime2");
@@ -464,12 +460,6 @@ namespace abcclicktrans.Data.Migrations
 
             modelBuilder.Entity("abcclicktrans.Data.Models.TransportOrder", b =>
                 {
-                    b.HasOne("abcclicktrans.Data.Models.ApplicationUser", "User")
-                        .WithMany()
-                        .HasForeignKey("ApplicationUserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("abcclicktrans.Data.Models.TransportAddress", "DeliveryAddress")
                         .WithMany()
                         .HasForeignKey("DeliveryAddressId")
@@ -485,8 +475,6 @@ namespace abcclicktrans.Data.Migrations
                     b.Navigation("DeliveryAddress");
 
                     b.Navigation("PickUpAddress");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("abcclicktrans.Data.Models.Vehicle", b =>
