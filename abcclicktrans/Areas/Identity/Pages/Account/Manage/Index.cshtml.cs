@@ -6,10 +6,12 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using abcclicktrans.Data;
 using abcclicktrans.Data.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace abcclicktrans.Areas.Identity.Pages.Account.Manage
 {
@@ -17,13 +19,16 @@ namespace abcclicktrans.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly AppDbContext _ctx;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager)
+            SignInManager<ApplicationUser> signInManager,
+            AppDbContext ctx)
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _ctx = ctx;
         }
 
         /// <summary>
@@ -108,6 +113,9 @@ namespace abcclicktrans.Areas.Identity.Pages.Account.Manage
             }
 
             await LoadAsync(user);
+            var s = await _ctx.Subscriptions.FirstOrDefaultAsync(x => x.ApplicationUserId == user.Id);
+            ViewData["sub"] = (s.ExpirationDateTime - DateTime.Now).Days;
+            ViewData["subNo"] = s.Id.ToString();
             return Page();
         }
 
@@ -116,7 +124,7 @@ namespace abcclicktrans.Areas.Identity.Pages.Account.Manage
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
-                return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+                return NotFound($"Nie można załadować użytkownika o identyfikatorze '{_userManager.GetUserId(User)}'.");
             }
 
             if (!ModelState.IsValid)
@@ -131,13 +139,13 @@ namespace abcclicktrans.Areas.Identity.Pages.Account.Manage
                 var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
                 if (!setPhoneResult.Succeeded)
                 {
-                    StatusMessage = "Unexpected error when trying to set phone number.";
+                    StatusMessage = "Nieoczekiwany błąd podczas próby ustawienia numeru telefonu.";
                     return RedirectToPage();
                 }
             }
 
             await _signInManager.RefreshSignInAsync(user);
-            StatusMessage = "Your profile has been updated";
+            StatusMessage = "Twój profil został zaktualizowany.";
             return RedirectToPage();
         }
     }

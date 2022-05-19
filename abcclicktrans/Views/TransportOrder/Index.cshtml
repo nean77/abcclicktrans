@@ -87,26 +87,28 @@
 
 @if (ViewData["FromAdd"] != null)
 {
-    @section Scripts {
+@section Scripts {
+    <script type="text/javascript">
         const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
 
         const alert = (message, type) => {
-        const wrapper = document.createElement('div')
-        wrapper.innerHTML = [
-        `<div class="alert alert-@ViewData["alert"] alert-dismissible" role="alert">`,
-            `   <div>@ViewData["message"]</div>`,
-            '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-            '</div>'
-        ].join('')
+            const wrapper = document.createElement('div')
+            wrapper.innerHTML = [
+                `<div class="alert alert-@ViewData["alert"] alert-dismissible" role="alert">`,
+                `   <div>@ViewData["message"]</div>`,
+                '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                '</div>'
+            ].join('')
 
-        alertPlaceholder.append(wrapper)
+            alertPlaceholder.append(wrapper)
         }
 
         const alertTrigger = document.getElementById('liveAlertBtn')
         if (alertTrigger) {
-        alertTrigger.addEventListener('click', () => {
-        alert('Nice, you triggered this alert message!', 'success')
-        })
+            alertTrigger.addEventListener('click', () => {
+                alert('Nice, you triggered this alert message!', 'success')
+            })
         }
+    </script>
 }
 }

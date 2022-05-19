@@ -3,6 +3,15 @@
 }
 
 <div class="slider-area ">
+    @if (ViewData["confirmed"] == "false")
+    {
+        <div class="alert alert-@ViewData["Alert"] alert-dismissible fade show" role="alert">
+            @ViewData["Message"]
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+    }
     <div class="slider-active">
         <!-- Single Slider -->
         <div class="single-slider slider-height d-flex align-items-center">
@@ -14,7 +23,7 @@
                         </div>
                         <div>
                             <a href="#" class="btn header-btn">Sprawdź nas już dziś !</a>
-                        </div>	
+                        </div>
                         <!-- Hero Pera -->
                         <div class="hero-pera">
                             <p>Pierwszy miesiąc za darmo !</p>
@@ -25,76 +34,76 @@
         </div>
     </div>
 </div>
-
 <!--? Categories Area Start -->
-    <div class="categories-area section-padding30">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <!-- Section Tittle -->
-                    <div class="section-tittle text-center mb-80">
-                        <span>Nasza oferta</span>
-                        <h2>Główne kategorie</h2>
+<div class="categories-area section-padding30">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <!-- Section Tittle -->
+                <div class="section-tittle text-center mb-80">
+                    <span>Nasza oferta</span>
+                    <h2>Główne kategorie</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-sm-4">
+                <div class="single-cat text-center mb-30">
+                    <div class="cat-icon">
+                        <span><i class="fa-solid fa-car-battery"></i></span>
+                    </div>
+                    <div class="cat-cap">
+                        <h5><a href="#">Części samochodowe</a></h5>
+                        <p>Przykładowy opis</p>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-lg-3 col-md-4 col-sm-4">
-                    <div class="single-cat text-center mb-30">
-                        <div class="cat-icon">
-                            <span><i class="fa-solid fa-car-battery"></i></span>
-                        </div>
-                        <div class="cat-cap">
-                            <h5><a href="#">Części samochodowe</a></h5>
-                            <p>Przykładowy opis</p>
-                        </div>
+            <div class="col-lg-3 col-md-4 col-sm-4">
+                <div class="single-cat text-center mb-30">
+                    <div class="cat-icon">
+                        <span><i class="fa-solid fa-car-rear"></i></span>
+                    </div>
+                    <div class="cat-cap">
+                        <h5><a href="#">Auta i motory</a></h5>
+                        <p>Przykładowy opis</p>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-4">
-                    <div class="single-cat text-center mb-30">
-                        <div class="cat-icon">
-                            <span><i class="fa-solid fa-car-rear"></i></span>
-                        </div>
-                        <div class="cat-cap">
-                            <h5><a href="#">Auta i motory</a></h5>
-                            <p>Przykładowy opis</p>
-                        </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-4">
+                <div class="single-cat text-center mb-30">
+                    <div class="cat-icon">
+                        <span><i class="fa-solid fa-house-chimney"></i></span>
+                    </div>
+                    <div class="cat-cap">
+                        <h5><a href="#">Przeprowadzki</a></h5>
+                        <p>Przykładowy opis</p>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-4">
-                    <div class="single-cat text-center mb-30">
-                        <div class="cat-icon">
-                            <span><i class="fa-solid fa-house-chimney"></i></span>
-                        </div>
-                        <div class="cat-cap">
-                            <h5><a href="#">Przeprowadzki</a></h5>
-                            <p>Przykładowy opis</p>
-                        </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-4">
+                <div class="single-cat text-center mb-30">
+                    <div class="cat-icon">
+                        <span><i class="fa-solid fa-box"></i></span>
+                    </div>
+                    <div class="cat-cap">
+                        <h5><a href="#">Paczki i palety</a></h5>
+                        <p>Przykładowy opis</p>
                     </div>
                 </div>
-                <div class="col-lg-3 col-md-4 col-sm-4">
-                    <div class="single-cat text-center mb-30">
-                        <div class="cat-icon">
-                            <span><i class="fa-solid fa-box"></i></span>
-                        </div>
-                        <div class="cat-cap">
-                            <h5><a href="#">Paczki i palety</a></h5>
-                            <p>Przykładowy opis</p>
-                        </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="single-cat text-center mb-30">
+                    <div class="cat-icon">
+                        <span><i class="fa-solid fa-handshake-simple"></i></span>
                     </div>
-                </div>
-                <div class="col-sm-12">
-                    <div class="single-cat text-center mb-30">
-                        <div class="cat-icon">
-                            <span><i class="fa-solid fa-handshake-simple"></i></span>
-                        </div>
-                        <div class="cat-cap">
-                            <h5><a href="#">Wiele innych transportów</a></h5>
-                            <p>Przykładowy opis</p>
-                        </div>
+                    <div class="cat-cap">
+                        <h5><a href="#">Wiele innych transportów</a></h5>
+                        <p>Przykładowy opis</p>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- Categories Area End -->
+</div>
+<!-- Categories Area End -->
+}

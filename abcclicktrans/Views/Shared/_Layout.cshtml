@@ -97,7 +97,7 @@
                                                     <li>
                                                         <a href="#">Moje konto</a>
                                                         <ul class="submenu">
-                                                            <li><a asp-area="Identity" asp-page="/Account/Manage/PersonalData">Moje dane</a></li>
+                                                            <li><a asp-area="Identity" asp-page="/Account/Manage/Index">Moje dane</a></li>
                                                             <li><a asp-controller="TransportOrder" asp-action="MyOrders">Moje zlecenia</a></li>
                                                             @if (this.User.IsInRole(AccountType.Supplier.ToString()))
                                                             {
@@ -107,7 +107,7 @@
                                                         </ul>
                                                     </li>
                                                 }
-                                                <li><a href="#">Kontakt</a></li>
+                                                <li><a asp-controller="Home" asp-action="Contact">Kontakt</a></li>
                                             </ul>
                                         </nav>
                                     </div>

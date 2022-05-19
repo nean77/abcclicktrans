@@ -2,7 +2,7 @@
 @using abcclicktrans.Data.Models
 @model IndexModel
 @{
-    ViewData["Title"] = "Profile";
+    ViewData["Title"] = "Profil";
     ViewData["ActivePage"] = ManageNavPages.Index;
 }
 
@@ -71,13 +71,41 @@
                 <label asp-for="Input.PhoneNumber" class="form-label"></label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
             </div>
-            
+
 
             <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
         </form>
     </div>
+    @if(Model.AccountType == AccountType.Supplier)
+    {
+        <div class="col-md-6">
+            @if ((int)ViewData["sub"] > 10)
+            {
+                <div class="alert alert-primary" role="alert">
+                    Twoja subskrypcja wygasa za @ViewData["sub"] dni.
+                </div>
+            }
+            else if ((int)ViewData["sub"] >= 0)
+            {
+                <div class="alert alert-warning" role="alert">
+                    Twoja subskrypcja wygasa za @ViewData["sub"] dni.
+                </div>
+            }
+            else
+            {
+                <div class="alert alert-danger" role="alert">
+                    Twoja subskrypcja wygasła. 
+                </div>
+            }
+            <p>
+                Aby przedłużyć subskrypcję wykonaj przelew na nr konta: XXXX... <br />
+                W tytule płatności wpisz nr Twojej subskrypcji: <b>@ViewData["subNo"]</b>. <br />
+                Po zaksięgowaniu płatności na koncie Twój dostęp zostanie wydłużony.
+            </p>
+        </div>
+    }
 </div>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+<partial name="_ValidationScriptsPartial" />
 }

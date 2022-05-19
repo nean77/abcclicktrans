@@ -142,3 +142,8 @@ time {
 .txt {
     color: #212121;
 }
+
+.alert {
+    width: 60%;
+    padding: 10px;
+}
