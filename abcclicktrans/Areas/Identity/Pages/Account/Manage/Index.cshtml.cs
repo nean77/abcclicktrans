@@ -133,20 +133,42 @@ namespace abcclicktrans.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
-            var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
-            if (Input.PhoneNumber != phoneNumber)
+            user = MapFromInput(user);
+            try
             {
-                var setPhoneResult = await _userManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-                if (!setPhoneResult.Succeeded)
+                _ctx.ApplicationUsers.Update(user);
+                var res = await _ctx.SaveChangesAsync();
+
+                if (res > 0)
                 {
-                    StatusMessage = "Nieoczekiwany błąd podczas próby ustawienia numeru telefonu.";
+                    StatusMessage = "Nieoczekiwany błąd podczas próby ustawienia aktualizacji.";
                     return RedirectToPage();
                 }
+            }
+            catch
+            {
+                StatusMessage = "Nieoczekiwany błąd podczas próby ustawienia aktualizacji.";
+                return RedirectToPage();
             }
 
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Twój profil został zaktualizowany.";
             return RedirectToPage();
+        }
+
+        private ApplicationUser MapFromInput(ApplicationUser user)
+        {
+            user.FirstName = Input.FirstName;
+            user.LastName = Input.LastName;
+            user.CompanyName = Input.CompanyName;
+            user.Nip = Input.NIP;
+            user.Street = Input.Street;
+            user.City = Input.City;
+            user.Postal = Input.Postal;
+            user.Country = Input.Country;
+            user.PhoneNumber = Input.PhoneNumber;
+
+            return user;
         }
     }
 }

@@ -2,7 +2,8 @@
     ViewData["Title"] = "Strona główna";
 }
 
-<div class="slider-area ">
+<div class="slider-area">
+    <div class="d-flex justify-content-center">
     @if (ViewData["confirmed"] == "false")
     {
         <div class="alert alert-@ViewData["Alert"] alert-dismissible fade show" role="alert">
@@ -12,6 +13,7 @@
             </button>
         </div>
     }
+    </div>
     <div class="slider-active">
         <!-- Single Slider -->
         <div class="single-slider slider-height d-flex align-items-center">

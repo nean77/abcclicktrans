@@ -5,7 +5,6 @@
     ViewData["Title"] = "Zlecenia";
 }
 <div class="container pb-40">
-    <div id="liveAlertPlaceholder"></div>
     <div class="panel">
         @foreach (var item in Model)
         {
@@ -85,30 +84,4 @@
     </div>
 </div>
 
-@if (ViewData["FromAdd"] != null)
-{
-@section Scripts {
-    <script type="text/javascript">
-        const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
-
-        const alert = (message, type) => {
-            const wrapper = document.createElement('div')
-            wrapper.innerHTML = [
-                `<div class="alert alert-@ViewData["alert"] alert-dismissible" role="alert">`,
-                `   <div>@ViewData["message"]</div>`,
-                '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
-                '</div>'
-            ].join('')
-
-            alertPlaceholder.append(wrapper)
-        }
-
-        const alertTrigger = document.getElementById('liveAlertBtn')
-        if (alertTrigger) {
-            alertTrigger.addEventListener('click', () => {
-                alert('Nice, you triggered this alert message!', 'success')
-            })
-        }
-    </script>
-}
 }

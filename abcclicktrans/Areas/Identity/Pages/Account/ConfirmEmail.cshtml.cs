@@ -40,6 +40,8 @@ namespace abcclicktrans.Areas.Identity.Pages.Account
             }
 
             code = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(code));
+
+            user.IsActive = true;
             var result = await _userManager.ConfirmEmailAsync(user, code);
             if (user.AccountType == AccountType.Supplier)
             {

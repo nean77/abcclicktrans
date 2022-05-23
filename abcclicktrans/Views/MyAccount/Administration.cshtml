@@ -1,0 +1,110 @@
+﻿@using abcclicktrans.Data.Models
+@using System.Linq
+@model IEnumerable<abcclicktrans.ViewModels.UserViewModel>
+@{
+    ViewData["Title"] = "Panel administracyjny";
+}
+<div class="container">
+    <div class="row pt-30 pb-20">
+        <div class="col-md-3 col-sm-6">
+            <input type="text" class="form-control" id="myInput" onkeyup="myFunction()" placeholder="Znajdź...">
+        </div>
+    </div>
+    <div class="row">
+        <table id="myTable">
+            <tr class="header">
+                <th>@Html.DisplayNameFor(Model=>Model.FirstOrDefault().Id)</th>
+                <th>@Html.DisplayNameFor(Model=>Model.FirstOrDefault().CompanyName)</th>
+                <th>@Html.DisplayNameFor(Model=>Model.FirstOrDefault().Nip)</th>
+                <th>@Html.DisplayNameFor(Model=>Model.FirstOrDefault().SubscriptionIdGuid)</th>
+                <th>@Html.DisplayNameFor(Model=>Model.FirstOrDefault().SubscriptionDateTime)</th>
+                <th>@Html.DisplayNameFor(Model=>Model.FirstOrDefault().IsConfirmed)</th>
+                <th>@Html.DisplayNameFor(Model=>Model.FirstOrDefault().IsActive)</th>
+                <th>Edytuj</th>
+            </tr>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Id</td>
+                    <td>@user.CompanyName</td>
+                    <td>@user.Nip</td>
+                    <td>@user.SubscriptionIdGuid</td>
+                    <td>
+                        <input asp-for="@user.SubscriptionDateTime" class="form-control" disabled/>
+                    </td>
+                    <td>
+                        @if (user.IsConfirmed)
+                        {
+                            <input asp-for="@user.IsConfirmed" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked disabled>
+                        }
+                        else
+                        {
+                            <input asp-for="@user.IsConfirmed" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" disabled>
+                        }
+                    </td>
+                    <td>
+                        @if (user.IsActive)
+                        {
+                            <input asp-for="@user.IsActive" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked disabled>
+                        }
+                        else
+                        {
+                            <input asp-for="@user.IsActive" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" disabled>
+                        }
+                    </td>
+                    <td>
+                        <a class="btn header-btn" onclick="PopupForm('@Url.Action("EditSupplier","MyAccount")/@user.Id')">Edytuj</a>
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+@section Scripts
+{
+    <script>
+        function myFunction() {
+            // Declare variables
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[0];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+    <script>
+        var Popup;
+
+        function PopupForm(url) {
+            var formDiv = $('<div/>');
+            $.get(url)
+                .done(function (response) {
+                    formDiv.html(response);
+
+                    Popup = formDiv.dialog({
+                        autoOpen: true,
+                        resizable: false,
+                        title: 'Edytuj',
+                        height: 700,
+                        width: 650,
+                        close: function () {
+                            Popup.dialog('destroy').remove();
+                        }
+                    });
+                });
+        }
+    </script>
+}

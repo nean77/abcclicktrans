@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="~/assets/css/nice-select.css">
     <link rel="stylesheet" href="~/assets/css/style.css">
     <link rel="stylesheet" href="~/assets/css/coverbootstrap.css">
+    <link rel="stylesheet" href="~/jquery-ui-themes-1.13.1/themes/base/jquery-ui.min.css" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
     <script src="https://kit.fontawesome.com/cfa5470044.js" crossorigin="anonymous"></script>
@@ -40,97 +41,104 @@
         </div>
     </div>
     <!-- Preloader Start -->
-    <header>
-        <!-- Header Start -->
-        <div class="header-area">
-            <div class="main-header ">
-                <div class="header-top d-none d-lg-block">
-                    <div class="container">
-                        <div class="col-xl-12">
-                            <div class="row d-flex justify-content-between align-items-center">
-                                <div class="header-info-left">
-                                    <ul>
-                                        <li>Telefon: +49 176 46161856</li>
-                                        <li>Email: abcclicktrans@gmx.de</li>
-                                    </ul>
-                                </div>
-                                <div class="header-info-right">
-                                    <ul class="header-social">
-                                        <li><a href="http://facebook.com/abcclicktrans.eu/" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
-                                        @if (SignInManager.IsSignedIn(User))
-                                        {
-                                            <li class="nav-item">
-                                                <a class="text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="fa-solid fa-gears"></i> Witaj @User.Identity?.Name</a>
-                                            </li>
-                                        }
-                                        else
-                                        {
-                                            <li><a asp-area="Identity" asp-page="/Account/Login"><i class="fa-solid fa-arrow-right-to-bracket"></i></a></li>
-                                        }
+<header>
+    <div class="d-flex justify-content-center">
+        <partial name="_CookieConsentPartial"/>
+    </div>
+    <!-- Header Start -->
+    <div class="header-area">
+        <div class="main-header ">
+            <div class="header-top d-none d-lg-block">
+                <div class="container">
+                    <div class="col-xl-12">
+                        <div class="row d-flex justify-content-between align-items-center">
+                            <div class="header-info-left">
+                                <ul>
+                                    <li>Telefon: +49 176 46161856</li>
+                                    <li>Email: abcclicktrans@gmx.de</li>
+                                </ul>
+                            </div>
+                            <div class="header-info-right">
+                                <ul class="header-social">
+                                    <li><a href="http://facebook.com/abcclicktrans.eu/" target="_blank"><i class="fab fa-facebook-f"></i></a></li>
+                                    @if (SignInManager.IsSignedIn(User))
+                                    {
+                                        <li class="nav-item">
+                                            <a class="text-light" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage"><i class="fa-solid fa-gears"></i> Witaj @User.Identity?.Name</a>
+                                        </li>
+                                    }
+                                    else
+                                    {
+                                        <li><a asp-area="Identity" asp-page="/Account/Login"><i class="fa-solid fa-arrow-right-to-bracket"></i></a></li>
+                                    }
 
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="header-bottom  header-sticky">
-                    <div class="container">
-                        <div class="row align-items-center">
-                            <!-- Logo -->
-                            <div class="col-xl-2 col-lg-2">
-                                <div class="logo">
-                                    <a asp-controller="Home" asp-action="Index"><img src="~/assets/img/logo/logo.png" alt="ABCclicktrans"></a>
-                                </div>
-                            </div>
-                            <div class="col-xl-10 col-lg-10">
-                                <div class="menu-wrapper  d-flex align-items-center justify-content-end">
-                                    <!-- Main-menu -->
-                                    <div class="main-menu d-none d-lg-block">
-                                        <nav>
-                                            <ul id="navigation">
-                                                <li><a asp-controller="Home" asp-action="Index">Home</a></li>
-                                                <li><a asp-controller="TransportOrder" asp-action="Index">Znajdź zlecenie</a></li>
-                                                <li><a asp-controller="TransportOrder" asp-action="AddOrder">Dodaj zlecenie</a></li>
-                                                @if (SignInManager.IsSignedIn(User)) 
-                                                {
-                                                    <li>
-                                                        <a href="#">Moje konto</a>
-                                                        <ul class="submenu">
-                                                            <li><a asp-area="Identity" asp-page="/Account/Manage/Index">Moje dane</a></li>
-                                                            <li><a asp-controller="TransportOrder" asp-action="MyOrders">Moje zlecenia</a></li>
-                                                            @if (this.User.IsInRole(AccountType.Supplier.ToString()))
-                                                            {
-                                                                <li><a asp-controller="MyAccount" asp-action="Vehicles">Moje pojazdy</a></li>
-                                                            }
-                                                            <li><a asp-controller="MyAccount" asp-action="Logout">Wyloguj</a></li>
-                                                        </ul>
-                                                    </li>
-                                                }
-                                                <li><a asp-controller="Home" asp-action="Contact">Kontakt</a></li>
-                                            </ul>
-                                        </nav>
-                                    </div>
-                                    <!-- Header-btn -->
-                                    <div class="header-right-btn d-none d-lg-block ml-20">
-                                        <a asp-controller="TransportOrder" asp-action="AddOrder" class="btn header-btn">Dodaj zlecenie</a>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- Mobile Menu -->
-                            <div class="col-12">
-                                <div class="mobile_menu d-block d-lg-none"></div>
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="header-bottom  header-sticky">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <!-- Logo -->
+                        <div class="col-xl-2 col-lg-2">
+                            <div class="logo">
+                                <a asp-controller="Home" asp-action="Index"><img src="~/assets/img/logo/logo.png" alt="ABCclicktrans"></a>
+                            </div>
+                        </div>
+                        <div class="col-xl-10 col-lg-10">
+                            <div class="menu-wrapper  d-flex align-items-center justify-content-end">
+                                <!-- Main-menu -->
+                                <div class="main-menu d-none d-lg-block">
+                                    <nav>
+                                        <ul id="navigation">
+                                            <li><a asp-controller="Home" asp-action="Index">Home</a></li>
+                                            <li><a asp-controller="TransportOrder" asp-action="Index">Znajdź zlecenie</a></li>
+                                            <li><a asp-controller="TransportOrder" asp-action="AddOrder">Dodaj zlecenie</a></li>
+                                            @if (SignInManager.IsSignedIn(User))
+                                            {
+                                                <li>
+                                                    <a href="#">Moje konto</a>
+                                                    <ul class="submenu">
+                                                        <li><a asp-area="Identity" asp-page="/Account/Manage/Index">Moje dane</a></li>
+                                                        <li><a asp-controller="TransportOrder" asp-action="MyOrders">Moje zlecenia</a></li>
+                                                        @if (User.IsInRole(AccountType.Supplier.ToString()))
+                                                        {
+                                                            <li><a asp-controller="MyAccount" asp-action="Vehicles">Moje pojazdy</a></li>
+                                                        }
+                                                        @if (User.IsInRole(AccountType.Admin.ToString()) || User.IsInRole(AccountType.SuperAdmin.ToString()))
+                                                        {
+                                                            <li><a asp-controller="MyAccount" asp-action="Administration">Administracja</a></li>
+                                                        }
+                                                        <li><a asp-controller="MyAccount" asp-action="Logout">Wyloguj</a></li>
+                                                    </ul>
+                                                </li>
+                                            }
+                                            <li><a asp-controller="Home" asp-action="Contact">Kontakt</a></li>
+                                        </ul>
+                                    </nav>
+                                </div>
+                                <!-- Header-btn -->
+                                <div class="header-right-btn d-none d-lg-block ml-20">
+                                    <a asp-controller="TransportOrder" asp-action="AddOrder" class="btn header-btn">Dodaj zlecenie</a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- Mobile Menu -->
+                        <div class="col-12">
+                            <div class="mobile_menu d-block d-lg-none"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- Header End -->
-    </header>
-    <main>
-        @RenderBody()
-    </main>
+    </div>
+    <!-- Header End -->
+</header>
+<main>
+    @RenderBody()
+</main>
     <footer>
         <!--? Footer Start-->
         <div class="footer-area footer-bg">
@@ -159,6 +167,9 @@
                                         <a asp-area="" asp-controller="Home" asp-action="Index">ABCclicktrans</a> All rights reserved  |
                                         Created by <a href="#">neandesing.pl</a> & based on template made by <a href="https://colorlib.com" target="_blank">Colorlib</a>
                                     </p>
+                                    <p>
+                                        <a asp-area="" asp-controller="Home" asp-action="Privacy">Polityka prywatności</a>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -169,9 +180,10 @@
         </div>
     </footer>
     <!-- Scroll Up -->
-    <div id="back-top">
-        <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
-    </div>
+<div id="back-top">
+    <a title="Go to Top" href="#"> <i class="fas fa-level-up-alt"></i></a>
+</div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
@@ -206,7 +218,9 @@
 
     <!-- Jquery Plugins, main Jquery -->
     <script src="~/assets/js/plugins.js"></script>
-    <script src="~/assets/js/main.js"></script>
+<script src="~/assets/js/main.js"></script>
+
+    <script src="~/jquery-ui-themes-1.13.1/jquery-ui.min.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

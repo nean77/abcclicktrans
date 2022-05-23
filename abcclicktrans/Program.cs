@@ -31,7 +31,11 @@ builder.Services.AddTransient<IEmailSender, MailService>();
 builder.Services.Configure<AuthMessageSenderOptions>(builder.Configuration);
 builder.Services.Configure<DataProtectionTokenProviderOptions>(o =>
     o.TokenLifespan = TimeSpan.FromHours(3));
-//builder.Services.AddRazorPages();
+builder.Services.Configure<CookiePolicyOptions>(opt =>
+{
+    opt.CheckConsentNeeded = context => true;
+    opt.MinimumSameSitePolicy = SameSiteMode.None;
+});
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
@@ -47,7 +51,7 @@ else
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
-
+app.UseCookiePolicy();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 

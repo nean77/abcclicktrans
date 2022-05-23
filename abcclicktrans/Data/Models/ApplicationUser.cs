@@ -18,7 +18,9 @@ namespace abcclicktrans.Data.Models
         [Display(Name = "Typ konta")] public AccountType AccountType { get; set; }
         public Guid? SubscriptionIdGuid { get; set; }
         public virtual Subscription? Subscription { get; set; }
-
+        public ApplicationUser() : base()
+        {
+        }
         public ApplicationUser(string firstName, string lastName, string email, string passwordHash) :base()
         {
             FirstName = firstName;

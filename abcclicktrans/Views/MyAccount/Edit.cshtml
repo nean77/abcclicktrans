@@ -1,0 +1,72 @@
+﻿@model abcclicktrans.ViewModels.UserViewModel
+@{
+    Layout = null;
+}
+@Html.AntiForgeryToken()
+
+@using (Html.BeginForm("EditSupplier", "MyAccount", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.Id)
+    <div class="form-group">
+        @Html.LabelFor(model => model.FirstName, new { @class = "control-label" })
+        @Html.EditorFor(m => m.FirstName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.LastName, new { @class = "control-label" })
+        @Html.EditorFor(m => m.LastName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.CompanyName, new { @class = "control-label" })
+        @Html.EditorFor(m => m.CompanyName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Nip, new { @class = "control-label" })
+        @Html.EditorFor(m => m.Nip, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.SubscriptionIdGuid, new { @class = "control-label" })
+        @Html.EditorFor(m => m.SubscriptionIdGuid, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.SubscriptionDateTime, new { @class = "control-label" })
+        @Html.EditorFor(m => m.SubscriptionDateTime, new { htmlAttributes = new { @class = "form-control",@id ="datapicker" } })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.IsActive, new { @class = "control-label" })
+        @if (Model.IsActive)
+        {
+            <input asp-for="@Model.IsActive" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked>
+        }
+        else
+        {
+            <input asp-for="@Model.IsActive" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+        }
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.IsConfirmed, new { @class = "control-label" })
+        @if (Model.IsConfirmed)
+        {
+            <input asp-for="@Model.IsConfirmed" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked>
+        }
+        else
+        {
+            <input asp-for="@Model.IsConfirmed" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault">
+        }
+    </div>
+    <div class="form-group">
+        <input type="submit" value="Zapisz" class="btn header-btn" />
+    </div>
+}
+
+<script type="text/javascript">
+    $(function() {
+        // Bootstrap DateTimePicker v3
+        $('#datapicker').datetimepicker({
+            pickTime: false
+        });
+        // Bootstrap DateTimePicker v4
+        $('#datetdatapickerimepicker').datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
+    });
+</script>

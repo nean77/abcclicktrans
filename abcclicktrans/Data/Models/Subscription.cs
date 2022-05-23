@@ -10,6 +10,7 @@ public class Subscription
     [Display(Name = "Data wygaśnięcia")] public DateTime ExpirationDateTime { get; set; }
     public virtual ApplicationUser ApplicationUser { get; set; }
 
+    public Subscription(){}
     public Subscription(string applicationUserId)
     {
         Id = Guid.NewGuid();

@@ -1,6 +1,7 @@
 ﻿using abcclicktrans.Data.Models;
 using abcclicktrans.ViewModels;
 using AutoMapper;
+using Microsoft.CodeAnalysis.Scripting;
 
 namespace abcclicktrans.Services
 {
@@ -15,7 +16,12 @@ namespace abcclicktrans.Services
                 .ForMember(x => x.Weight, opt => opt.MapFrom(src => src.ParcelSize.Weight))
                 ;
             CreateMap<TransportOrder, TransportOrderViewModel>()
-                .ForMember(x => x.Image, opt => opt.Ignore()); 
+                .ForMember(x => x.Image, opt => opt.Ignore());
+
+            CreateMap<ApplicationUser, UserViewModel>()
+                .ForMember(x=>x.SubscriptionDateTime,opt=>opt.MapFrom(src=>src.Subscription.ExpirationDateTime))
+                .ForMember(x => x.SubscriptionIdGuid, opt => opt.MapFrom(src => src.Subscription.Id))
+                .ReverseMap();
         }
     }
 }

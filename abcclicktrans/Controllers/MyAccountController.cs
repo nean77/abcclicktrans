@@ -1,14 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.Reflection;
-using abcclicktrans.Data;
+﻿using abcclicktrans.Data;
 using abcclicktrans.Data.Models;
+using abcclicktrans.Extensions;
+using abcclicktrans.ViewModels;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
-using abcclicktrans.Extensions;
 using Microsoft.OpenApi.Extensions;
+using System.Security.Claims;
 
 namespace abcclicktrans.Controllers
 {
@@ -18,14 +18,16 @@ namespace abcclicktrans.Controllers
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly AppDbContext _ctx;
+        private readonly IMapper _mapper;
 
         public MyAccountController(SignInManager<ApplicationUser> signInManager, ILogger<MyAccountController> logger,
-            IHttpContextAccessor httpContextAccessor, AppDbContext ctx)
+            IHttpContextAccessor httpContextAccessor, AppDbContext ctx, IMapper mapper)
         {
             _logger = logger;
             _signInManager = signInManager;
             _httpContextAccessor = httpContextAccessor;
             _ctx = ctx;
+            _mapper = mapper;
         }
 
         [HttpGet]
@@ -56,6 +58,7 @@ namespace abcclicktrans.Controllers
         {
             return View();
         }
+
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> AddVehicle(Vehicle vehicle)
@@ -86,6 +89,7 @@ namespace abcclicktrans.Controllers
             var vehicle = await _ctx.Vehicles.FirstOrDefaultAsync(x => x.Id == id);
             return View(vehicle);
         }
+
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> EditVehicle(Vehicle vehicle)
@@ -105,6 +109,7 @@ namespace abcclicktrans.Controllers
                 return View(vehicle);
             }
         }
+
         [HttpGet]
         [Authorize]
         public async Task<IActionResult> DeleteVehicle(int id)
@@ -135,7 +140,7 @@ namespace abcclicktrans.Controllers
             {
                 throw new Exception("Vehicle can't be deleted");
             }
-            
+
         }
 
         [Authorize]
@@ -147,8 +152,65 @@ namespace abcclicktrans.Controllers
             {
                 return LocalRedirect(returnUrl);
             }
+
             return RedirectToAction("Index", "Home");
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Admin, SuperAdmin")]
+        public async Task<IActionResult> Administration()
+        {
+            var list = await _ctx.ApplicationUsers
+                .Include(x => x.Subscription)
+                .Where(x => x.AccountType == AccountType.Supplier)
+                .ToListAsync();
+            var users = new List<UserViewModel>();
+            foreach (var userDTO in list)
+            {
+                userDTO.Subscription.ExpirationDateTime = userDTO.Subscription.ExpirationDateTime.Date;
+                users.Add(_mapper.Map<UserViewModel>(userDTO));
+            }
+
+            return View(users);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Admin, SuperAdmin")]
+        public async Task<IActionResult> EditSupplier(string id)
+        {
+            var userDTO = await _ctx.ApplicationUsers
+                .Include(x=>x.Subscription)
+                .FirstOrDefaultAsync(x => x.Id == id);
+
+            var user = _mapper.Map<UserViewModel>(userDTO);
+
+            return View("Edit", user);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Admin, SuperAdmin")]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditSupplier(UserViewModel user)
+        {
+            try
+            {
+                var userDTO = await _ctx.ApplicationUsers
+                    .Include(x => x.Subscription)
+                    .FirstOrDefaultAsync(x => x.Id == user.Id);
+
+                userDTO.Subscription.ExpirationDateTime = user.SubscriptionDateTime;
+                userDTO.IsActive = user.IsActive;
+                userDTO.IsConfirmed = user.IsConfirmed;
+
+                _ctx.ApplicationUsers.Update(userDTO);
+                await _ctx.SaveChangesAsync();
+                return RedirectToAction("Administration");
+            }
+            catch
+            {
+                _logger.LogCritical("Unable to update user from administration panel");
+                return RedirectToAction("Index", "Home");
+            }
+        }
     }
 }
