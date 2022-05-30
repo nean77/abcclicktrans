@@ -113,9 +113,13 @@ namespace abcclicktrans.Areas.Identity.Pages.Account.Manage
             }
 
             await LoadAsync(user);
-            var s = await _ctx.Subscriptions.FirstOrDefaultAsync(x => x.ApplicationUserId == user.Id);
-            ViewData["sub"] = (s.ExpirationDateTime - DateTime.Now).Days;
-            ViewData["subNo"] = s.Id.ToString();
+            if (user.AccountType == AccountType.Supplier)
+            {
+                var s = await _ctx.Subscriptions.FirstOrDefaultAsync(x => x.ApplicationUserId == user.Id);
+                ViewData["sub"] = (s.ExpirationDateTime - DateTime.Now).Days;
+                ViewData["subNo"] = s.Id.ToString();
+            }
+
             return Page();
         }
 
@@ -141,7 +145,7 @@ namespace abcclicktrans.Areas.Identity.Pages.Account.Manage
 
                 if (res > 0)
                 {
-                    StatusMessage = "Nieoczekiwany błąd podczas próby ustawienia aktualizacji.";
+                    StatusMessage = "Profil został zaktualizowany.";
                     return RedirectToPage();
                 }
             }

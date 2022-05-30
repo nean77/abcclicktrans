@@ -22,7 +22,8 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
         options.Password.RequiredLength = 8;
     })
     .AddRoles<IdentityRole>()
-    .AddEntityFrameworkStores<AppDbContext>();
+    .AddEntityFrameworkStores<AppDbContext>()
+    .AddSignInManager<ApplicationSignInManager>();
 
 //builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();

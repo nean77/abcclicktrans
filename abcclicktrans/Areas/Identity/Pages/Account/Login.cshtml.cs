@@ -8,6 +8,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using abcclicktrans.Data.Models;
+using abcclicktrans.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
@@ -23,7 +24,7 @@ namespace abcclicktrans.Areas.Identity.Pages.Account
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly ILogger<LoginModel> _logger;
 
-        public LoginModel(SignInManager<ApplicationUser> signInManager, ILogger<LoginModel> logger)
+        public LoginModel(ApplicationSignInManager signInManager, ILogger<LoginModel> logger)
         {
             _signInManager = signInManager;
             _logger = logger;
@@ -65,7 +66,8 @@ namespace abcclicktrans.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+
+            [Required(ErrorMessage = "To pole jest wymagane")]
             [EmailAddress]
             public string Email { get; set; }
 
@@ -73,7 +75,8 @@ namespace abcclicktrans.Areas.Identity.Pages.Account
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
             ///     directly from your code. This API may change or be removed in future releases.
             /// </summary>
-            [Required]
+
+            [Required(ErrorMessage = "To pole jest wymagane")]
             [DataType(DataType.Password)]
             public string Password { get; set; }
 

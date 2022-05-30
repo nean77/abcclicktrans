@@ -130,15 +130,14 @@ namespace abcclicktrans.Areas.Identity.Pages.Account
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
-                await CreateRole();
-                await AddUserToRole(user);
-                if(user.AccountType == AccountType.Supplier)
-                {
-                    await GenerateSubscription(user);
-                }
-
                 if (result.Succeeded)
                 {
+                    await CreateRole();
+                    await AddUserToRole(user);
+                    if (user.AccountType == AccountType.Supplier)
+                    {
+                        await GenerateSubscription(user);
+                    }
                     _logger.LogInformation("User created a new account with password.");
 
                     var userId = await _userManager.GetUserIdAsync(user);

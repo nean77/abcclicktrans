@@ -76,9 +76,9 @@
             <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
         </form>
     </div>
-    @if(Model.AccountType == AccountType.Supplier)
-    {
-        <div class="col-md-6">
+    <div class="col-md-6">
+        @if (Model.AccountType == AccountType.Supplier)
+        {
             @if ((int)ViewData["sub"] > 10)
             {
                 <div class="alert alert-primary" role="alert">
@@ -94,7 +94,7 @@
             else
             {
                 <div class="alert alert-danger" role="alert">
-                    Twoja subskrypcja wygasła. 
+                    Twoja subskrypcja wygasła.
                 </div>
             }
             <p>
@@ -102,8 +102,15 @@
                 W tytule płatności wpisz nr Twojej subskrypcji: <b>@ViewData["subNo"]</b>. <br />
                 Po zaksięgowaniu płatności na koncie Twój dostęp zostanie wydłużony.
             </p>
-        </div>
-    }
+        }
+        else
+        {
+            <div class="alert alert-info" role="alert">
+                Konto administratora.
+            </div>
+        }
+    </div>
+
 </div>
 
 @section Scripts {

@@ -1,17 +1,13 @@
-﻿using System.Security.Claims;
-using System;
-using System.IO;
-using System.Net.Mail;
-using abcclicktrans.Data;
+﻿using abcclicktrans.Data;
 using abcclicktrans.Data.Models;
 using abcclicktrans.ViewModels;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Mail;
+using System.Security.Claims;
 
 namespace abcclicktrans.Controllers
 {
@@ -69,6 +65,7 @@ namespace abcclicktrans.Controllers
                 }
 
                 if (!User.IsInRole(AccountType.Supplier.ToString()) ||
+                    !User.IsInRole(AccountType.Admin.ToString()) ||
                     !activeSubscription)
                 {
                     var mail = new MailAddress(item.User.Email);
