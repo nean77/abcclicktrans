@@ -1,6 +1,6 @@
 ﻿@using abcclicktrans.ViewModels
 @using System.Globalization
-@model IEnumerable<abcclicktrans.ViewModels.TransportOrderViewModel>
+@model abcclicktrans.Data.Models.PaginatedList<abcclicktrans.ViewModels.TransportOrderViewModel>
 @{
     ViewData["Title"] = "Zlecenia";
 }
@@ -27,7 +27,9 @@
                             }
                             else
                             {
-                                <img src="/assets/img/no-photo.jpg" alt="Obraz" class="img-thumbnail">
+                                <a href="/assets/img/no-photo.jpg" class="img-pop-up">
+                                    <img src="/assets/img/no-photo.jpg" alt="Obraz" class="img-thumbnail">
+                                </a>
                             }
                         </div>
                         <div class="col-md-5 col-sm-5">
@@ -52,13 +54,13 @@
                             </span>
                             <b>Data nadania:</b>
                             @if (@item.PickupDateTime == null)
-                                {
-                                    <span class="text-justify text-dark">- do ustalenia -</span>
-                                }
-                                else
-                                {
-                                    <span class="text-justify text-dark">@item.PickupDateTime</span>
-                                }
+                            {
+                                <span class="text-justify text-dark">- do ustalenia -</span>
+                            }
+                            else
+                            {
+                                <span class="text-justify text-dark">@item.PickupDateTime</span>
+                            }
                         </div>
                         <div class="col-md-6 col-sm-6">
                             <p><b>Adres dostawy:</b></p>
@@ -81,6 +83,22 @@
                 </div>
             </details>
         }
+        @{
+            var prevDisabled = !Model.PreviousPage ? "disabled" : "";
+            var nextDisabled = !Model.NextPage ? "disabled" : "";
+        }
+        <div class="row pt-20">
+            <a asp-action="Index"
+               asp-route-pageNumber="@(Model.PageIndex - 1)"
+               class="btn btn-info m-2 @prevDisabled">
+                Poprzednia
+            </a>
+            <a asp-action="Index"
+               asp-route-pageNumber="@(Model.PageIndex + 1)"
+               class="btn btn-info m-2 @nextDisabled">
+                Następna
+            </a>
+        </div>
     </div>
 </div>
 

@@ -162,7 +162,7 @@ namespace abcclicktrans.Controllers
         {
             var list = await _ctx.ApplicationUsers
                 .Include(x => x.Subscription)
-                .Where(x => x.AccountType == AccountType.Supplier)
+                .Where(x => x.AccountType != AccountType.Admin)
                 .ToListAsync();
             var users = new List<UserViewModel>();
             foreach (var userDTO in list)

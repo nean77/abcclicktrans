@@ -103,10 +103,16 @@
                 Po zaksięgowaniu płatności na koncie Twój dostęp zostanie wydłużony.
             </p>
         }
-        else
+        else if (Model.AccountType == AccountType.Admin)
         {
             <div class="alert alert-info" role="alert">
                 Konto administratora.
+            </div>
+        }
+        else if (Model.AccountType == AccountType.Customer)
+        {
+            <div class="alert alert-info" role="alert">
+                Konto zleceniodawcy.
             </div>
         }
     </div>

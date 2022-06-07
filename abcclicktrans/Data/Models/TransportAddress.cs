@@ -1,12 +1,18 @@
-﻿namespace abcclicktrans.Data.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace abcclicktrans.Data.Models
 {
     public class TransportAddress
     {
         public Guid Id { get; set; }
-        public string Street { get; set; }
-        public string City { get; set; }
-        public string Postal { get; set; }
-        public string Country { get; set; }
+        [Display(Name = "Ulica")]
+        public string? Street { get; set; }
+        [Display(Name = "Miasto")]
+        public string? City { get; set; }
+        [Display(Name = "Kod pocztowy")]
+        public string? Postal { get; set; }
+        [Display(Name = "Kraj")]
+        public string? Country { get; set; }
 
         public TransportAddress()
         {

@@ -115,9 +115,17 @@ namespace abcclicktrans.Areas.Identity.Pages.Account.Manage
             await LoadAsync(user);
             if (user.AccountType == AccountType.Supplier)
             {
-                var s = await _ctx.Subscriptions.FirstOrDefaultAsync(x => x.ApplicationUserId == user.Id);
-                ViewData["sub"] = (s.ExpirationDateTime - DateTime.Now).Days;
-                ViewData["subNo"] = s.Id.ToString();
+                var supplier = await _ctx.Subscriptions.FirstOrDefaultAsync(x => x.ApplicationUserId == user.Id);
+                if (supplier == null)
+                {
+                    ViewData["sub"] = "brak danych";
+                    ViewData["subNo"] = "brak danych";
+                }
+                else
+                {
+                    ViewData["sub"] = (supplier.ExpirationDateTime - DateTime.Now).Days;
+                    ViewData["subNo"] = supplier.Id.ToString();
+                }
             }
 
             return Page();

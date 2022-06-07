@@ -16,15 +16,16 @@ namespace abcclicktrans.Data.Models
         public bool OCP { get; set; }
         public bool ADR { get; set; }
         [Display(Name = "Data utworzenia")] public DateTime CreateDateTime { get; set; }
-        [Display(Name = "Adres nadania")][Required] public TransportAddress PickUpAddress { get; set; }
+        [Display(Name = "Adres nadania")] public TransportAddress? PickUpAddress { get; set; }
         [Display(Name = "Data nadania")] public DateTime? PickupDateTime { get; set; }
-        [Display(Name = "Adres Dostawy")][Required] public TransportAddress DeliveryAddress { get; set; }
+        [Display(Name = "Adres Dostawy")] public TransportAddress? DeliveryAddress { get; set; }
         [Display(Name = "Data dostawy")] public DateTime? DeliveryDateTime { get; set; }
         [Display(Name = "Dystans")] public string? Distance { get; set; }
         [Display(Name = "Kategoria towaru")][Required] public ParcelCategory Category { get; set; }
         [Display(Name = "Budżet")][DataType(DataType.Currency)] public decimal MaxValue { get; set; }
         [Display(Name = "Obraz")] public string? Image { get; set; }
         [Display(Name = "Id użytkownika")] public string ApplicationUserId { get; set; }
+        public string? IPaddress { get; set; }
         public ApplicationUser User { get; set; }
     }
     

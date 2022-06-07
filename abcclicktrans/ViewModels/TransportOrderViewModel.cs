@@ -9,44 +9,33 @@ namespace abcclicktrans.ViewModels
         [Display(Name = "Id zlecenia")] public long Id { get; set; }
         [Display(Name = "Tytuł")][Required] public string Name { get; set; }
 
-        [Required]
-        [Display(Name = "Opis transportu")]
-        public string Description { get; set; }
+        [Required] [Display(Name = "Opis transportu")] public string Description { get; set; }
 
         [Display(Name = "Wymiary")] public ParcelSize ParcelSize { get; set; }
         [Display(Name = "Wymagana winda")] public bool TailLift { get; set; }
 
-        [Display(Name = "Wymagana pomoc załadunku")]
-        public bool LoadAssistance { get; set; }
+        [Display(Name = "Wymagana pomoc załadunku")] public bool LoadAssistance { get; set; }
 
         public bool OCP { get; set; }
         public bool ADR { get; set; }
         [Display(Name = "Data utworzenia")] public DateTime CreateDateTime { get; set; }
 
-        [Required]
-        [Display(Name = "Adres nadania")]
-        public TransportAddress PickUpAddress { get; set; }
+        [Display(Name = "Adres nadania")] public TransportAddress? PickUpAddress { get; set; } 
 
         [Display(Name = "Data nadania")][DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")] public DateTime? PickupDateTime { get; set; }
 
-        [Required]
-        [Display(Name = "Adres Dostawy")]
-        public TransportAddress DeliveryAddress { get; set; }
-
+        [Display(Name = "Adres Dostawy")] public TransportAddress? DeliveryAddress { get; set; } 
         [Display(Name = "Data dostawy")][DisplayFormat(DataFormatString = "{0:dd MMM yyyy}")] public DateTime? DeliveryDateTime { get; set; }
+
         [Display(Name = "Dystans")] public string? Distance { get; set; }
 
-        [Required]
-        [Display(Name = "Kategoria towaru")]
-        public ParcelCategory Category { get; set; }
+        [Required] [Display(Name = "Kategoria towaru")] public ParcelCategory Category { get; set; }
 
-        [Display(Name = "Budżet")]
-        [DataType(DataType.Currency)]
-        public decimal MaxValue { get; set; }
+        [Display(Name = "Budżet")] [DataType(DataType.Currency)] public decimal MaxValue { get; set; }
 
         [Display(Name = "Obraz")] public IFormFile? Image { get; set; }
         public string? ImageSrc { get; set; }
-
+        public string? IPaddress { get; set; }
         [Display(Name = "Id użytkownika")] public string ApplicationUserId { get; set; }
         public virtual ApplicationUser User { get; set; }
 

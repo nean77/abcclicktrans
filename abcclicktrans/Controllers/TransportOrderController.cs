@@ -1,4 +1,5 @@
-﻿using abcclicktrans.Data;
+﻿using System.Net;
+using abcclicktrans.Data;
 using abcclicktrans.Data.Models;
 using abcclicktrans.ViewModels;
 using AutoMapper;
@@ -7,7 +8,10 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Net.Mail;
+using System.Reflection;
 using System.Security.Claims;
+using abcclicktrans.Services;
+using Microsoft.AspNetCore.Http.Features;
 
 namespace abcclicktrans.Controllers
 {
@@ -30,7 +34,7 @@ namespace abcclicktrans.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int pageNumber=1)
         {
             List<TransportOrderViewModel> orders = new List<TransportOrderViewModel>();
             var userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
@@ -57,32 +61,44 @@ namespace abcclicktrans.Controllers
                 bool activeSubscription = false;
                 if (userId != null)
                 {
-                    activeSubscription =
-                        _ctx.Subscriptions.FirstOrDefault(x => x.ApplicationUserId == userId).ExpirationDateTime >=
-                        DateTime.Now
-                            ? true
-                            : false;
+                    var user = _ctx.ApplicationUsers.FirstOrDefault(x => x.Id == userId);
+                    if (user != null && user.IsActive == false)
+                    {
+                        await _signInManager.SignOutAsync();
+                        return RedirectToAction("Index", "Home");
+                    }
+
+                    var sub = _ctx.Subscriptions.FirstOrDefault(x => x.ApplicationUserId == userId);
+
+                    if (sub != null)
+                        activeSubscription =  sub.ExpirationDateTime >= DateTime.Now ?
+                            true : false;
+                    else activeSubscription = false;
                 }
 
-                if (!User.IsInRole(AccountType.Supplier.ToString()) ||
-                    !User.IsInRole(AccountType.Admin.ToString()) ||
-                    !activeSubscription)
+                if (User.IsInRole(AccountType.Admin.ToString()) ||
+                    (User.IsInRole(AccountType.Supplier.ToString()) && activeSubscription))
                 {
-                    var mail = new MailAddress(item.User.Email);
-                    order.User.Email = item.User.Email.Substring(0, 4) + "***@" + mail.Host;
-                    if (order.User.PhoneNumber != null)
-                        order.User.PhoneNumber = item.User.PhoneNumber.Substring(0, 5) + "****";
-
-                    order.PickUpAddress.Street = "***";
-                    order.PickUpAddress.Country = "***";
-
-                    order.DeliveryAddress.Street = "***";
-                    order.DeliveryAddress.Country = "***";
+                    orders.Add(order);
+                    continue;
                 }
+                
+                var mail = new MailAddress(item.User.Email);
+                order.User.Email = item.User.Email.Substring(0, 4) + "***@" + mail.Host;
+                if (order.User.PhoneNumber != null)
+                    order.User.PhoneNumber = item.User.PhoneNumber.Substring(0, 5) + "****";
+
+                order.PickUpAddress.Street = "***";
+                order.PickUpAddress.Country = "***";
+
+                order.DeliveryAddress.Street = "***";
+                order.DeliveryAddress.Country = "***";
+                
                 orders.Add(order);
             }
 
-            return View(orders);
+            return View(await PaginatedList<TransportOrderViewModel>.CreateAsync(orders, pageNumber, 15));
+            //return View(orders);
         }
 
         [HttpGet]
@@ -108,7 +124,7 @@ namespace abcclicktrans.Controllers
                     Weight = item.Weight,
                     Width = item.Width
                 };
-                order.ImageSrc = item.Image;
+                order.ImageSrc = "/" + item.Image;
                 orders.Add(order);
             }
 
@@ -116,10 +132,19 @@ namespace abcclicktrans.Controllers
         }
         [HttpGet]
         [Authorize]
-        public IActionResult AddOrder()
+        public async Task<IActionResult> AddOrder()
         {
+            var userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var user = _ctx.ApplicationUsers.FirstOrDefault(x => x.Id == userId);
+            if (user != null && user.IsActive == false)
+            {
+                await _signInManager.SignOutAsync();
+                return RedirectToAction("Index", "Home");
+            }
+
             return View();
         }
+
         [HttpPost]
         [Authorize]
         [ValidateAntiForgeryToken]
@@ -129,6 +154,18 @@ namespace abcclicktrans.Controllers
             order.ApplicationUserId = userId;
             try
             {
+                IPAddress remoteIpAddress = Request.HttpContext.Connection.RemoteIpAddress;
+                if (remoteIpAddress != null)
+                {
+                    // If we got an IPV6 address, then we need to ask the network for the IPV4 address 
+                    // This usually only happens when the browser is on the same machine as the server.
+                    if (remoteIpAddress.AddressFamily == System.Net.Sockets.AddressFamily.InterNetworkV6)
+                    {
+                        remoteIpAddress = System.Net.Dns.GetHostEntry(remoteIpAddress).AddressList
+                            .First(x => x.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork);
+                    }
+                    order.IPaddress = remoteIpAddress.ToString();
+                }
                 string uniqueFile = await UploadedFile(order.Image);
                 var orderDto = _mapper.Map<TransportOrder>(order);
                 orderDto.Image = uniqueFile;
@@ -158,8 +195,9 @@ namespace abcclicktrans.Controllers
             {
                 if (file != null && file.Length > 0)
                 {
-                    filename = Guid.NewGuid() + Path.GetExtension(file.FileName);
-                    path = Path.GetFullPath(Path.Combine(Directory.GetCurrentDirectory(), "\\wwwroot\\UploadedPhotos"));
+                    filename = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
+                    path = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location) + "\\wwwroot\\assets\\img\\UploadedPhotos";
+                    //return path;
                     using (var filestream = new FileStream(Path.Combine(path, filename), FileMode.Create))
                     {
                         await file.CopyToAsync(filestream);
@@ -168,10 +206,11 @@ namespace abcclicktrans.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(ex.Message);
                 throw new InvalidOperationException("Bład zapisu pliku");
             }
 
-            return "/UploadedPhotos/" + filename;
+            return "/assets/img/UploadedPhotos/" + filename;
         }
     }
 }
