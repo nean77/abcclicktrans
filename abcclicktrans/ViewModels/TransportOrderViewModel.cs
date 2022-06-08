@@ -32,6 +32,7 @@ namespace abcclicktrans.ViewModels
         [Required] [Display(Name = "Kategoria towaru")] public ParcelCategory Category { get; set; }
 
         [Display(Name = "Budżet")] [DataType(DataType.Currency)] public decimal MaxValue { get; set; }
+        [Display(Name="Waluta")]public Currency Currency { get; set; }
 
         [Display(Name = "Obraz")] public IFormFile? Image { get; set; }
         public string? ImageSrc { get; set; }

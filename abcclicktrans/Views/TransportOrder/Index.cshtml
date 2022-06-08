@@ -4,11 +4,21 @@
 @{
     ViewData["Title"] = "Zlecenia";
 }
-<div class="container pb-40">
+<div class="container pb-30">
+    <div class="row mt-10">
+            <form asp-controller="TransportOrder" asp-action="FilteredOrders" class="row g-3" method="post">
+                <div class="col-auto">
+                    <input type="text" class="form-control" name="SearchString" placeholder="Znajdź miasto">
+                </div>
+                <div class="col-auto">
+                    <input type="submit" value="Szukaj" class="btn btn-info mb-3" />
+                </div>
+            </form>
+    </div>
     <div class="panel">
         @foreach (var item in Model)
         {
-            <details>
+            <details id="torder">
                 <summary>
                     <ul>
                         <li class="name">@item.Name</li>
@@ -34,14 +44,48 @@
                         </div>
                         <div class="col-md-5 col-sm-5">
                             <span class="text-justify text-dark">@item.Description</span>
+                            
+                            @{
+                                var ocpDisabled = !item.OCP ? "checked " : "";
+                                var adrDisabled = !item.ADR ? "checked " : "";
+                                var tailDisabled = !item.LoadAssistance ? "checked " : "";
+                                var loadDisabled = !item.TailLift ? "checked " : "";
+                            }
+                            <br/><br/>
+                            <span>Wymagania</span>
+                            <br/>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" value="" id="ocpcheckbox" @ocpDisabled disabled>
+                                <label class="form-check-label" for="ocpcheckbox">OCP</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" value="" id="adrcheckbox" @adrDisabled disabled>
+                                <label class="form-check-label" for="adrcheckbox">ADR</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" value="" id="loadcheckbox" @loadDisabled disabled>
+                                <label class="form-check-label" for="loadcheckbox">Pomoc załadunku</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="checkbox" value="" id="tailcheckbox" @tailDisabled disabled>
+                                <label class="form-check-label" for="tailcheckbox">Winda</label>
+                            </div>
                         </div>
                         <div class="col-md-4 col-sm-4">
-                            <span>Zleceniodawca:</span><br />
-                            <span class="txt"><b>Email: </b>@item.User.Email</span><br />
+                            <span><b>Zleceniodawca:</b></span><br />
+                            <span class="txt">Email: @item.User.Email</span><br />
                             @if (item.User.PhoneNumber != null)
                             {
-                                <span class="txt"><b>Telefon: </b>@item.User.PhoneNumber</span>
+                                <span class="txt">Telefon: @item.User.PhoneNumber</span>
                             }
+                            <br/>
+                            <span><b>Budżet:</b></span>
+                            <div class="input-group mb-3">
+                                <div class="col-xs-2">
+                                    <input type="text" class="form-control" placeholder="@item.MaxValue" aria-label="budzet" aria-describedby="basic-addon2" disabled>
+                                    <span class="input-group-text" id="basic-addon2">@item.Currency</span>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row">

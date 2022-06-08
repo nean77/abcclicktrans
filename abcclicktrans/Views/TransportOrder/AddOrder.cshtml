@@ -1,4 +1,5 @@
 ﻿@using abcclicktrans.Data.Models
+@using abcclicktrans.Extensions
 @model abcclicktrans.ViewModels.TransportOrderViewModel
 @{
     ViewData["Title"] = "Dodaj zlecenie";
@@ -51,27 +52,27 @@
                                 <span asp-validation-for="ParcelSize.Height" class="text-danger"></span>
                             </div>
                         </div>
-                        <div class="form-group form-check">
+                        <div class="form-check form-check-inline">
                             <label class="form-check-label">
                                 <input class="form-check-input" asp-for="TailLift"/> @Html.DisplayNameFor(model => model.TailLift)
                             </label>
                         </div>
-                        <div class="form-group form-check">
+                        <div class="form-check form-check-inline">
                             <label class="form-check-label">
                                 <input class="form-check-input" asp-for="LoadAssistance"/> @Html.DisplayNameFor(model => model.LoadAssistance)
                             </label>
                         </div>
-                        <div class="form-group form-check">
+                        <div class="form-check form-check-inline">
                             <label class="form-check-label">
                                 <input class="form-check-input" asp-for="OCP"/> @Html.DisplayNameFor(model => model.OCP)
                             </label>
                         </div>
-                        <div class="form-group form-check">
+                        <div class="form-check form-check-inline">
                             <label class="form-check-label">
                                 <input class="form-check-input" asp-for="ADR"/> @Html.DisplayNameFor(model => model.ADR)
                             </label>
                         </div>
-                        <div class="card">
+                        <div class="card pt-15">
                             <h5 class="card-header">Adres nadania</h5>
                             <div class="card-body">
                                 <div class="form-group">
@@ -132,8 +133,14 @@
                             <br/>
                             <label asp-for="MaxValue" class="control-label"></label>
                             <input asp-for="MaxValue" class="form-control"/>
+                            @foreach (var cur in System.Enum.GetValues(typeof(Currency)).OfType<Currency>())
+                            {
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="@cur.GetDisplayName()" value="@cur.GetDisplayName()">
+                                    <label class="form-check-label" for="@cur.GetDisplayName()">@cur.GetDisplayName()</label>
+                                </div>
+                            }
                             <span asp-validation-for="MaxValue" class="text-danger"></span>
-                            <span class="text-dark">Kwota podawana w PLN.</span>
                         </div>
                         <div class="form-group">
                             <label asp-for="Image" class="control-label"></label>

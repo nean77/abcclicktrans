@@ -23,6 +23,7 @@ namespace abcclicktrans.Data.Models
         [Display(Name = "Dystans")] public string? Distance { get; set; }
         [Display(Name = "Kategoria towaru")][Required] public ParcelCategory Category { get; set; }
         [Display(Name = "Budżet")][DataType(DataType.Currency)] public decimal MaxValue { get; set; }
+        [Display(Name = "Waluta")] public int Currency { get; set; }
         [Display(Name = "Obraz")] public string? Image { get; set; }
         [Display(Name = "Id użytkownika")] public string ApplicationUserId { get; set; }
         public string? IPaddress { get; set; }
