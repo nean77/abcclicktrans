@@ -5,13 +5,11 @@
     ViewData["Title"] = "Zlecenia";
 }
 <div class="container pb-30">
-    <div class="row mt-10">
+    <div class="row pt-10">
             <form asp-controller="TransportOrder" asp-action="FilteredOrders" class="row g-3" method="post">
-                <div class="col-auto">
-                    <input type="text" class="form-control" name="SearchString" placeholder="Znajdź miasto">
-                </div>
-                <div class="col-auto">
-                    <input type="submit" value="Szukaj" class="btn btn-info mb-3" />
+                <div class="input-group ml-5">
+                    <input type="text" class="form-control mt-2" name="SearchString" placeholder="Znajdź miasto">
+                    <button class="btn btn-outline-secondary ml-2" type="submit" id="button-addon2">Szukaj</button>
                 </div>
             </form>
     </div>
@@ -81,10 +79,8 @@
                             <br/>
                             <span><b>Budżet:</b></span>
                             <div class="input-group mb-3">
-                                <div class="col-xs-2">
-                                    <input type="text" class="form-control" placeholder="@item.MaxValue" aria-label="budzet" aria-describedby="basic-addon2" disabled>
+                                    <input type="text" class="form-control" placeholder="@item.MaxValue" aria-label="budzet" aria-describedby="basic-addon2" style="text-align:right;" disabled>
                                     <span class="input-group-text" id="basic-addon2">@item.Currency</span>
-                                </div>
                             </div>
                         </div>
                     </div>
