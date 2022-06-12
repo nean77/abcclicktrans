@@ -24,7 +24,7 @@ namespace abcclicktrans.Services
                     mail.Body = htmlMessage;
                     mail.IsBodyHtml = true;
 
-                    using (SmtpClient smtp = new SmtpClient("smtp.mail.yahoo.com", 587))
+                    using (SmtpClient smtp = new SmtpClient("smtp.webio.pl", 587)) //"smtp.mail.yahoo.com", 587
                     {
                         smtp.Credentials = new System.Net.NetworkCredential(
                             mailClass.FromMailId, mailClass.FromMailIdPassword

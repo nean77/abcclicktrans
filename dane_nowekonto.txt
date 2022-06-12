@@ -1,0 +1,29 @@
+abcclicktrans@gmx.de
+hasło webio:  GmxAndyG2022!abc.#
+
+Pyt pomocnicze: imię pupila - szarik
+
+Baza danych:
+mssql.webio.pl,2401
+U: grzybowa_abcclicktrans
+H: WebioGrzybowA2022!abc.#
+
+baza: grzybowa_abcclicktrans
+
+
+Konto admina - ABCCLICKTRANS.EU
+MAIL: abcclicktrans@gmx.de
+Hasło: adminABCgrzybowa2022!
+
+Panel webio
+l: grzybowa
+h: sJX4hrqK26D-+6
+
+webio deploy:
+u: abcclicktrans_dploy
+h: dployABCgrzybowa2022!
+
+
+Poczta:
+notification@abcclicktrans.eu
+notificationABCgrzybowa2022!

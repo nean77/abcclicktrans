@@ -167,7 +167,10 @@ namespace abcclicktrans.Controllers
             var users = new List<UserViewModel>();
             foreach (var userDTO in list)
             {
-                userDTO.Subscription.ExpirationDateTime = userDTO.Subscription.ExpirationDateTime.Date;
+                if (userDTO.AccountType == AccountType.Supplier)
+                {
+                    userDTO.Subscription.ExpirationDateTime = userDTO.Subscription.ExpirationDateTime.Date;
+                }
                 users.Add(_mapper.Map<UserViewModel>(userDTO));
             }
 
@@ -179,7 +182,7 @@ namespace abcclicktrans.Controllers
         public async Task<IActionResult> EditSupplier(string id)
         {
             var userDTO = await _ctx.ApplicationUsers
-                .Include(x=>x.Subscription)
+                .Include(x => x.Subscription)
                 .FirstOrDefaultAsync(x => x.Id == id);
 
             var user = _mapper.Map<UserViewModel>(userDTO);

@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Net.Mail;
 using System.Reflection;
 using System.Security.Claims;
+using abcclicktrans.Exceptions;
 using abcclicktrans.Services;
 using Microsoft.AspNetCore.Http.Features;
 
@@ -37,7 +38,6 @@ namespace abcclicktrans.Controllers
         public async Task<IActionResult> Index(int pageNumber=1)
         {
             List<TransportOrderViewModel> orders = new List<TransportOrderViewModel>();
-            var userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
             var ordersDto = await _ctx.TransportOrders
                 .Include(u => u.User)
@@ -46,60 +46,19 @@ namespace abcclicktrans.Controllers
                 .OrderByDescending(x=>x.CreateDateTime)
                 .ToListAsync();
 
-            foreach (var item in ordersDto)
+            try
             {
-                var order = _mapper.Map<TransportOrderViewModel>(item);
-                order.ParcelSize = new ParcelSize
-                {
-                    Height = item.Height,
-                    Length = item.Length,
-                    Weight = item.Weight,
-                    Width = item.Width
-                };
-                order.ImageSrc = item.Image;
-
-                bool activeSubscription = false;
-                if (userId != null)
-                {
-                    var user = _ctx.ApplicationUsers.FirstOrDefault(x => x.Id == userId);
-                    if (user != null && user.IsActive == false)
-                    {
-                        await _signInManager.SignOutAsync();
-                        return RedirectToAction("Index", "Home");
-                    }
-
-                    var sub = _ctx.Subscriptions.FirstOrDefault(x => x.ApplicationUserId == userId);
-
-                    if (sub != null)
-                        activeSubscription =  sub.ExpirationDateTime >= DateTime.Now ?
-                            true : false;
-                    else activeSubscription = false;
-                }
-
-                if (User.IsInRole(AccountType.Admin.ToString()) ||
-                    (User.IsInRole(AccountType.Supplier.ToString()) && activeSubscription))
-                {
-                    orders.Add(order);
-                    continue;
-                }
-                
-                var mail = new MailAddress(item.User.Email);
-                order.User.Email = item.User.Email.Substring(0, 4) + "***@" + mail.Host;
-                if (order.User.PhoneNumber != null)
-                    order.User.PhoneNumber = item.User.PhoneNumber.Substring(0, 5) + "****";
-
-                order.PickUpAddress.Street = "***";
-                order.PickUpAddress.Country = "***";
-
-                order.DeliveryAddress.Street = "***";
-                order.DeliveryAddress.Country = "***";
-                
-                orders.Add(order);
+                orders = await ConvertOrderDTOToOrders(ordersDto);
             }
+            catch (UserLogedOutException ex)
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            
 
             return View(await PaginatedList<TransportOrderViewModel>.CreateAsync(orders, pageNumber, 15));
-            //return View(orders);
         }
+
         [HttpPost]
         public async Task<IActionResult> FilteredOrders(string searchString, bool notUsed, int pageNumber = 1)
         {
@@ -114,55 +73,13 @@ namespace abcclicktrans.Controllers
                 .Where(x=>(x.DeliveryAddress.City.Contains(searchString)) || (x.PickUpAddress.City.Contains(searchString)))
                 .ToListAsync();
 
-            foreach (var item in ordersDto)
+            try
             {
-                var order = _mapper.Map<TransportOrderViewModel>(item);
-                order.ParcelSize = new ParcelSize
-                {
-                    Height = item.Height,
-                    Length = item.Length,
-                    Weight = item.Weight,
-                    Width = item.Width
-                };
-                order.ImageSrc = item.Image;
-
-                bool activeSubscription = false;
-                if (userId != null)
-                {
-                    var user = _ctx.ApplicationUsers.FirstOrDefault(x => x.Id == userId);
-                    if (user != null && user.IsActive == false)
-                    {
-                        await _signInManager.SignOutAsync();
-                        return RedirectToAction("Index", "Home");
-                    }
-
-                    var sub = _ctx.Subscriptions.FirstOrDefault(x => x.ApplicationUserId == userId);
-
-                    if (sub != null)
-                        activeSubscription = sub.ExpirationDateTime >= DateTime.Now ?
-                            true : false;
-                    else activeSubscription = false;
-                }
-
-                if (User.IsInRole(AccountType.Admin.ToString()) ||
-                    (User.IsInRole(AccountType.Supplier.ToString()) && activeSubscription))
-                {
-                    orders.Add(order);
-                    continue;
-                }
-
-                var mail = new MailAddress(item.User.Email);
-                order.User.Email = item.User.Email.Substring(0, 4) + "***@" + mail.Host;
-                if (order.User.PhoneNumber != null)
-                    order.User.PhoneNumber = item.User.PhoneNumber.Substring(0, 5) + "****";
-
-                order.PickUpAddress.Street = "***";
-                order.PickUpAddress.Country = "***";
-
-                order.DeliveryAddress.Street = "***";
-                order.DeliveryAddress.Country = "***";
-
-                orders.Add(order);
+                orders = await ConvertOrderDTOToOrders(ordersDto);
+            }
+            catch (UserLogedOutException ex)
+            {
+                return RedirectToAction("Index", "Home");
             }
 
             return View("Index", await PaginatedList<TransportOrderViewModel>.CreateAsync(orders, pageNumber, 15));
@@ -280,5 +197,66 @@ namespace abcclicktrans.Controllers
 
             return "/assets/img/UploadedPhotos/" + filename;
         }
+
+        private async Task<List<TransportOrderViewModel>> ConvertOrderDTOToOrders(List<TransportOrder> ordersDto)
+        {
+            List<TransportOrderViewModel> orders = new List<TransportOrderViewModel>();
+            foreach (var item in ordersDto)
+            {
+                var userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+                var order = _mapper.Map<TransportOrderViewModel>(item);
+                order.ParcelSize = new ParcelSize
+                {
+                    Height = item.Height,
+                    Length = item.Length,
+                    Weight = item.Weight,
+                    Width = item.Width
+                };
+                order.ImageSrc = item.Image;
+
+                bool activeSubscription = false;
+                bool docConfirmed = false;
+                if (userId != null)
+                {
+                    var user = _ctx.ApplicationUsers.FirstOrDefault(x => x.Id == userId);
+                    if (user != null && user.IsActive == false)
+                    {
+                        await _signInManager.SignOutAsync();
+                        throw new UserLogedOutException();
+                        //return RedirectToAction("Index", "Home");
+                    }
+
+                    var sub = _ctx.Subscriptions.FirstOrDefault(x => x.ApplicationUserId == userId);
+                    docConfirmed = user.IsConfirmed;
+                    if (sub != null)
+                        activeSubscription = sub.ExpirationDateTime >= DateTime.Now ?
+                            true : false;
+                    else activeSubscription = false;
+                }
+
+                if (User.IsInRole(AccountType.Admin.ToString()) ||
+                    (User.IsInRole(AccountType.Supplier.ToString()) && activeSubscription && docConfirmed))
+                {
+                    orders.Add(order);
+                    continue;
+                }
+
+                var mail = new MailAddress(item.User.Email);
+                order.User.Email = item.User.Email.Substring(0, 4) + "***@" + mail.Host;
+                if (order.User.PhoneNumber != null)
+                    order.User.PhoneNumber = item.User.PhoneNumber.Substring(0, 5) + "****";
+
+                order.PickUpAddress.Street = "***";
+                order.PickUpAddress.Country = "***";
+
+                order.DeliveryAddress.Street = "***";
+                order.DeliveryAddress.Country = "***";
+
+                orders.Add(order);
+            }
+
+            return orders;
+        }
+
     }
 }
