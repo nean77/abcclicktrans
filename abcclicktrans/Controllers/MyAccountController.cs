@@ -160,21 +160,23 @@ namespace abcclicktrans.Controllers
         [Authorize(Roles = "Admin, SuperAdmin")]
         public async Task<IActionResult> Administration()
         {
-            var list = await _ctx.ApplicationUsers
-                .Include(x => x.Subscription)
-                .Where(x => x.AccountType != AccountType.Admin)
-                .ToListAsync();
-            var users = new List<UserViewModel>();
-            foreach (var userDTO in list)
-            {
-                if (userDTO.AccountType == AccountType.Supplier)
-                {
-                    userDTO.Subscription.ExpirationDateTime = userDTO.Subscription.ExpirationDateTime.Date;
-                }
-                users.Add(_mapper.Map<UserViewModel>(userDTO));
-            }
+            //var list = await _ctx.ApplicationUsers
+            //    .Include(x => x.Subscription)
+            //    .Where(x => x.AccountType != AccountType.Admin)
+            //    .ToListAsync();
+            //var users = new List<UserViewModel>();
+            //foreach (var userDTO in list)
+            //{
+            //    if (userDTO.AccountType == AccountType.Supplier)
+            //    {
+            //        userDTO.Subscription.ExpirationDateTime = userDTO.Subscription.ExpirationDateTime.Date;
+            //    }
+            //    users.Add(_mapper.Map<UserViewModel>(userDTO));
+            //}
 
-            return View(users);
+            //return View(users);
+
+            return RedirectToAction("Index", "Admin");
         }
 
         [HttpGet]

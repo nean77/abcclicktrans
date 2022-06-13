@@ -1,6 +1,7 @@
 ﻿using abcclicktrans.Data.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using abcclicktrans.ViewModels;
 
 namespace abcclicktrans.Data
 {
@@ -16,5 +17,6 @@ namespace abcclicktrans.Data
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<TransportOrder> TransportOrders { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
+        public DbSet<abcclicktrans.ViewModels.UserViewModel>? UserViewModel { get; set; }
     }
 }

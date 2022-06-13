@@ -8,6 +8,8 @@ namespace abcclicktrans.ViewModels
         [Display(Name = "Id")][Required] public string Id { get; set; }
         [Display(Name = "Imię")][Required] public string FirstName { get; set; }
         [Display(Name = "Nazwisko")][Required] public string LastName { get; set; }
+        [Display(Name = "Email")] public string Email { get; set; }
+        [Display(Name = "Email")] public string EmailAddress { get; set; }
         [Display(Name = "Nazwa firmy")] public string? CompanyName { get; set; }
         [MaxLength(10)] public string Nip { get; set; }
         [Display(Name = "Konto aktywne")] public bool IsActive { get; set; }

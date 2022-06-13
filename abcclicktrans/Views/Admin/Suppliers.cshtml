@@ -1,0 +1,69 @@
+﻿@using abcclicktrans.Data.Models
+@using System.Linq
+@model IEnumerable<abcclicktrans.ViewModels.UserViewModel>
+@{
+    ViewData["Title"] = "Przewoźnicy";
+    Layout = "~/Views/Admin/_Layout.cshtml";
+}
+<h1 class="h3 mb-3">Przewoźnicy</h1>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header"></div>
+            
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(Model=>Model.FirstOrDefault().Id)</th>
+                    <th>@Html.DisplayNameFor(Model=>Model.FirstOrDefault().FirstName)</th>
+                    <th>@Html.DisplayNameFor(Model=>Model.FirstOrDefault().LastName)</th>
+                    <th>@Html.DisplayNameFor(Model=>Model.FirstOrDefault().CompanyName)</th>
+                    <th>@Html.DisplayNameFor(Model=>Model.FirstOrDefault().Nip)</th>
+                    <th>@Html.DisplayNameFor(Model=>Model.FirstOrDefault().Email)</th>
+                    <th>@Html.DisplayNameFor(Model=>Model.FirstOrDefault().IsConfirmed)</th>
+                    <th>@Html.DisplayNameFor(Model=>Model.FirstOrDefault().IsActive)</th>
+                    <th>Edytuj</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var user in Model)
+                {
+                    <tr>
+                        <td>@user.Id</td>
+                        <td>@user.FirstName</td>
+                        <td>@user.LastName</td>
+                        <td>@user.CompanyName</td>
+                        <td>@user.Nip</td>
+                        <td>@user.Email</td>
+                        <td>
+                            @if (user.IsConfirmed)
+                            {
+                                <input asp-for="@user.IsConfirmed" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked disabled>
+                            }
+                            else
+                            {
+                                <input asp-for="@user.IsConfirmed" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" disabled>
+                            }
+                        </td>
+                        <td>
+                            @if (user.IsActive)
+                            {
+                                <input asp-for="@user.IsActive" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked disabled>
+                            }
+                            else
+                            {
+                                <input asp-for="@user.IsActive" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" disabled>
+                            }
+                        </td>
+                        <td>
+                            <a asp-action="EditSupplier" asp-route-id="@user.Id"><i class="fa-solid fa-user-pen"></i></a>
+                            @*<a onclick="PopupForm('@Url.Action("EditSupplier", "MyAccount")/@user.Id')"><i class="fa-solid fa-user-pen"></i></a>*@
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
