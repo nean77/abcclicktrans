@@ -242,10 +242,26 @@ namespace abcclicktrans.Controllers
                 }
 
                 var mail = new MailAddress(item.User.Email);
-                order.User.Email = item.User.Email.Substring(0, 4) + "***@" + mail.Host;
+                try
+                {
+                    order.User.Email = item.User.Email.Substring(0, 3) + "***@" + mail.Host;
+                }
+                catch
+                {
+                    order.User.Email = "błąd";
+                }
+                
                 if (order.User.PhoneNumber != null)
-                    order.User.PhoneNumber = item.User.PhoneNumber.Substring(0, 5) + "****";
-
+                {
+                    try
+                    {
+                        order.User.PhoneNumber = item.User.PhoneNumber.Substring(0, 4) + "****";
+                    }
+                    catch
+                    {
+                        order.User.PhoneNumber = "brak";
+                    }
+                }
                 order.PickUpAddress.Street = "***";
                 order.PickUpAddress.Country = "***";
 

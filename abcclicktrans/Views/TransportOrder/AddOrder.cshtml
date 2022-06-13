@@ -131,17 +131,13 @@
                         <br/>
                         <div class="form-group">
                             <br/>
-                            <label asp-for="MaxValue" class="control-label"></label>
-                            <input asp-for="MaxValue" class="form-control"/>
-                            @foreach (var cur in System.Enum.GetValues(typeof(Currency)).OfType<Currency>())
-                            {
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="inlineRadioOptions" id="@cur.GetDisplayName()" value="@cur.GetDisplayName()">
-                                    <label class="form-check-label" for="@cur.GetDisplayName()">@cur.GetDisplayName()</label>
-                                </div>
-                            }
-                            <span asp-validation-for="MaxValue" class="text-danger"></span>
-                        </div>
+                            <label asp-for="MaxValue" class="control-label"></label><br/>
+                            <div class="form-check form-check-inline">
+                                <input asp-for="MaxValue" class="form-control"/>
+                                <select asp-for="Currency" asp-items="Html.GetEnumSelectList<Currency>()" class="form-control"></select>
+                                <span asp-validation-for="MaxValue" class="text-danger"></span>
+                            </div>
+                            </div>
                         <div class="form-group">
                             <label asp-for="Image" class="control-label"></label>
                             <div class="custom-file">
