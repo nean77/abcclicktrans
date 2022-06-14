@@ -98,8 +98,11 @@
                 </div>
             }
             <p>
-                Aby przedłużyć subskrypcję wykonaj przelew na nr konta: XXXX... <br />
-                W tytule płatności wpisz nr Twojej subskrypcji: <b>@ViewData["subNo"]</b>. <br />
+                Aby przedłużyć subskrypcję wykonaj przelew na nr konta: <br />
+                @ViewData["AccountNum"]<br />
+                <br />
+                W tytule płatności wpisz nr Twojej subskrypcji: <br />
+                <b>@ViewData["subNo"]</b>. <br />
                 Po zaksięgowaniu płatności na koncie Twój dostęp zostanie wydłużony.
             </p>
         }

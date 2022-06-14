@@ -17,6 +17,6 @@ namespace abcclicktrans.Data
         public DbSet<Subscription> Subscriptions { get; set; }
         public DbSet<TransportOrder> TransportOrders { get; set; }
         public DbSet<Vehicle> Vehicles { get; set; }
-        public DbSet<abcclicktrans.ViewModels.UserViewModel>? UserViewModel { get; set; }
+        public DbSet<Parameters> Params { get; set; }
     }
 }

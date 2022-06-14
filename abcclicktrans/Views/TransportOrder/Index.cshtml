@@ -99,7 +99,7 @@
                             }
                             else
                             {
-                                <span class="text-justify text-dark">@item.PickupDateTime</span>
+                                <span class="text-justify text-dark">@item.PickupDateTime?.ToShortDateString()</span>
                             }
                         </div>
                         <div class="col-md-6 col-sm-6">
@@ -116,7 +116,7 @@
                             }
                             else
                             {
-                                <span class="text-justify text-dark"> @item.PickupDateTime </span>
+                                <span class="text-justify text-dark"> @item.PickupDateTime?.ToShortDateString() </span>
                             }
                         </div>
                     </div>

@@ -111,11 +111,12 @@ namespace abcclicktrans.Areas.Identity.Pages.Account.Manage
             {
                 return NotFound($"Nie odnaleziono użytkownika '{_userManager.GetUserId(User)}'.");
             }
-
             await LoadAsync(user);
             if (user.AccountType == AccountType.Supplier)
             {
                 var supplier = await _ctx.Subscriptions.FirstOrDefaultAsync(x => x.ApplicationUserId == user.Id);
+                var accountNum = await _ctx.Params.FirstOrDefaultAsync(x => x.Id == "AccountNum");
+                ViewData["AccountNum"] = accountNum.Value;
                 if (supplier == null)
                 {
                     ViewData["sub"] = "brak danych";

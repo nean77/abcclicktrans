@@ -1,0 +1,39 @@
+﻿@model abcclicktrans.Data.Models.Parameters
+
+@{
+    ViewData["Title"] = "Edytuj";
+    Layout = "~/Views/Admin/_Layout.cshtml";
+}
+@Html.AntiForgeryToken()
+<h1 class="h3 mb-3">Parametry</h1>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">Edytuj parametr</div>
+            <div class="card-body">
+                <form asp-action="EditParms" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="CreateDateTime" />
+                    <input type="hidden" asp-for="ModifiedDateTime" />
+                    <div class="form-group">
+                        <label asp-for="Value" class="control-label"></label>
+                        <input asp-for="Value" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Description" class="control-label"></label>
+                        <input asp-for="Description" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Zapisz" class="btn btn-primary" />
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Admin" asp-action="Parameters" class="btn btn-outline-secondary">Powrót</a>
+</div>
+

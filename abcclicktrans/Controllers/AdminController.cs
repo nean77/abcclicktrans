@@ -235,5 +235,31 @@ namespace abcclicktrans.Controllers
                 return RedirectToAction("Suppliers");
             }
         }
+
+        [HttpGet]
+        public async Task<IActionResult> Parameters()
+        {
+            var parms = await _ctx.Params.ToListAsync();
+            return View(parms);
+        }
+        [HttpGet]
+        public IActionResult EditParms(string id)
+        {
+            var parms = _ctx.Params.FirstOrDefault(x=>x.Id == id);
+            return View(parms);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditParms(Parameters parms)
+        {
+            if (ModelState.IsValid)
+            {
+                parms.ModifiedDateTime = DateTime.Now;
+                _ctx.Params.Update(parms);
+                _ctx.SaveChanges();
+                return RedirectToAction("Parameters");
+            }
+            return View(parms);
+        }
     }
 }

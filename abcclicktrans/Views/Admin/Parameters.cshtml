@@ -1,0 +1,44 @@
+﻿@using abcclicktrans.Data.Models
+@model IEnumerable<Parameters>
+@{
+    ViewData["Title"] = "Parametry";
+    Layout = "~/Views/Admin/_Layout.cshtml";
+}
+<h1 class="h3 mb-3">Parametry</h1>
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+
+            </div>
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>@Html.DisplayNameFor(Model=>Model.Id)</th>
+                    <th>@Html.DisplayNameFor(Model=>Model.Value)</th>
+                    <th>@Html.DisplayNameFor(Model=>Model.Description)</th>
+                    <th>@Html.DisplayNameFor(Model=>Model.ModifiedDateTime)</th>
+                    <th>@Html.DisplayNameFor(Model=>Model.CreateDateTime)</th>
+                    <th>Edytuj</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var parms in Model)
+                {
+                    <tr>
+                        <td>@parms.Id</td>
+                        <td>@parms.Value</td>
+                        <td>@parms.Description</td>
+                        <td>@parms.ModifiedDateTime</td>
+                        <td>@parms.CreateDateTime.ToShortDateString()</td>
+                        <td class="table-action">
+                            <a asp-action="EditParms" asp-route-id="@parms.Id"><i class="fa-solid fa-user-pen"></i></a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
