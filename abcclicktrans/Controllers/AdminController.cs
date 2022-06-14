@@ -85,15 +85,13 @@ namespace abcclicktrans.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Orders(int pageNumber = 1)
+        public async Task<IActionResult> Orders()
         {
             List<TransportOrderViewModel> orders = new List<TransportOrderViewModel>();
-            var userId = _httpContextAccessor.HttpContext?.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
             var ordersDto = await _ctx.TransportOrders
                 .Include(u => u.User)
                 .Include(pua => pua.PickUpAddress)
                 .Include(dlv => dlv.DeliveryAddress)
-                .Where(x => x.ApplicationUserId == userId)
                 .ToListAsync();
 
             foreach (var item in ordersDto)
@@ -110,7 +108,7 @@ namespace abcclicktrans.Controllers
                 orders.Add(order);
             }
 
-            return View(await PaginatedList<TransportOrderViewModel>.CreateAsync(orders, pageNumber, 15));
+            return View(orders);
         }
 
         [HttpGet]
@@ -192,7 +190,9 @@ namespace abcclicktrans.Controllers
         {
             try
             {
-                var user = _ctx.ApplicationUsers.FirstOrDefault(x => x.Id == id);
+                var user = _ctx.ApplicationUsers
+                    .Include(x=>x.Subscription)
+                    .FirstOrDefault(x => x.Id == id);
                 if (user == null) return RedirectToAction("Suppliers");
 
                 var userVM = new UserViewModel();

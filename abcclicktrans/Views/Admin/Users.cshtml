@@ -9,7 +9,9 @@
 <div class="row">
     <div class="col-12">
         <div class="card">
-            <div class="card-header"></div>
+            <div class="card-header">
+                <input type="text" class="form-control" id="myInput" onkeyup="myFunction()" placeholder="Znajdź...">
+            </div>
             
             <table class="table table-striped">
                 <thead>
@@ -33,16 +35,6 @@
                         <td>@user.Nip</td>
                         <td>@user.Email</td>
                         <td>
-                            @if (user.IsConfirmed)
-                            {
-                                <input asp-for="@user.IsConfirmed" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked disabled>
-                            }
-                            else
-                            {
-                                <input asp-for="@user.IsConfirmed" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" disabled>
-                            }
-                        </td>
-                        <td>
                             @if (user.IsActive)
                             {
                                 <input asp-for="@user.IsActive" class="form-check-input" type="checkbox" id="flexSwitchCheckDefault" checked disabled>
@@ -54,7 +46,6 @@
                         </td>
                         <td>
                             <a asp-action="EditCustomer" asp-route-id="@user.Id"><i class="fa-solid fa-user-pen"></i></a>
-                            @*<a onclick="PopupForm('@Url.Action("EditSupplier", "MyAccount")/@user.Id')"><i class="fa-solid fa-user-pen"></i></a>*@
                         </td>
                     </tr>
                 }
@@ -64,3 +55,31 @@
     </div>
 </div>
 
+@section Scripts
+{
+    <script>
+        function myFunction() {
+            // Declare variables
+            var input, filter, table, tr, td, i, j, txtValue;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("myTable");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                for (j = 0; j < 7; j++) {
+                    td = tr[i].getElementsByTagName("td")[j];
+                    if (td) {
+                        txtValue = td.textContent || td.innerText;
+                        if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                            tr[i].style.display = "";
+                        } else {
+                            tr[i].style.display = "none";
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+}

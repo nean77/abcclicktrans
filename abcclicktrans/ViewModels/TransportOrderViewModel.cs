@@ -36,7 +36,7 @@ namespace abcclicktrans.ViewModels
 
         [Display(Name = "Obraz")] public IFormFile? Image { get; set; }
         public string? ImageSrc { get; set; }
-        public string? IPaddress { get; set; }
+        [Display(Name = "Adres IP utworzenia")] public string? IPaddress { get; set; }
         [Display(Name = "Id użytkownika")] public string ApplicationUserId { get; set; }
         public virtual ApplicationUser User { get; set; }
 
