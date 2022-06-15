@@ -55,12 +55,13 @@ namespace abcclicktrans.Controllers
             try
             {
                 var message = cvm.Message + "<br/><br/><b> Wysłane ze strony przez: </b>" + cvm.Email;
-                await _emailSender.SendEmailAsync("abcclicktrans@yahoo.com", cvm.Subject, message);
+                await _emailSender.SendEmailAsync("kontakt@abcclicktrans.eu", cvm.Subject, message);
             }
             catch
             {
                 return View(cvm);
             }
+            _logger.LogInformation("Message send from contact form");
             return View();
         }
 
@@ -68,6 +69,7 @@ namespace abcclicktrans.Controllers
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
+            _logger.LogError($"Error displayed {Activity.Current.DisplayName} - {Activity.Current.OperationName}");
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }

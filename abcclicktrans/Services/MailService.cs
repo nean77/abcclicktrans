@@ -7,7 +7,7 @@ namespace abcclicktrans.Services
     public class MailService : IEmailSender
     {
         private readonly ILogger _logger;
-        public MailService(ILogger<EmailSender> logger)
+        public MailService(ILogger<MailService> logger)
         {
             _logger = logger;
         }

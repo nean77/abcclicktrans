@@ -43,7 +43,7 @@ namespace abcclicktrans.Controllers
             model.Suppliers = await _ctx.ApplicationUsers.Where(x => x.AccountType == AccountType.Supplier).CountAsync();
             model.ActiveSubscriptions =
                 await _ctx.Subscriptions.Where(x => x.ExpirationDateTime >= DateTime.Now).CountAsync();
-
+            _logger.LogWarning("User logged to admin panel");
             return View(model);
         }
 
@@ -128,6 +128,7 @@ namespace abcclicktrans.Controllers
                 {
                     _ctx.TransportOrders.Remove(order);
                     _ctx.SaveChanges();
+                    _logger.LogWarning("Order deleted");
                     return RedirectToAction("Orders");
                 }
             }
@@ -174,6 +175,7 @@ namespace abcclicktrans.Controllers
 
                 _ctx.ApplicationUsers.Update(user);
                 await _ctx.SaveChangesAsync();
+                _logger.LogWarning("Customer edited by admin");
 
                 return RedirectToAction("Users");
             }
@@ -227,6 +229,7 @@ namespace abcclicktrans.Controllers
                 userDTO.SubscriptionIdGuid = userDTO.Subscription.Id;
                 _ctx.ApplicationUsers.Update(userDTO);
                 await _ctx.SaveChangesAsync();
+                _logger.LogWarning("Supplier edited by admin");
                 return RedirectToAction("Suppliers");
             }
             catch

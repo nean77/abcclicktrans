@@ -6,9 +6,11 @@ using Microsoft.AspNetCore.Http;
 using abcclicktrans.Services;
 using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Log4Net.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Logging.AddLog4Net(); //creating the provider
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("abcClickTrans");
 builder.Services.AddDbContext<AppDbContext>(options =>
@@ -39,7 +41,6 @@ builder.Services.Configure<CookiePolicyOptions>(opt =>
     opt.MinimumSameSitePolicy = SameSiteMode.None;
 });
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
