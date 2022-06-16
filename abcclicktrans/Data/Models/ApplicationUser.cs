@@ -18,6 +18,7 @@ namespace abcclicktrans.Data.Models
         [Display(Name = "Typ konta")] public AccountType AccountType { get; set; }
         public Guid? SubscriptionIdGuid { get; set; }
         public virtual Subscription? Subscription { get; set; }
+        [PersonalData] public DateTimeOffset LastLoginDate { get; set; }
         public ApplicationUser() : base()
         {
         }
